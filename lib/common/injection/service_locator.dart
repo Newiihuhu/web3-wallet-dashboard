@@ -24,11 +24,18 @@ Future<void> initializeDependencies() async {
 Future<void> _registerExternalDependencies() async {
   getIt.registerLazySingleton<Dio>(() {
     final dio = Dio();
-    dio.options.connectTimeout = const Duration(seconds: 30);
-    dio.options.receiveTimeout = const Duration(seconds: 30);
-    dio.options.sendTimeout = const Duration(seconds: 30);
+    dio.options.connectTimeout = const Duration(seconds: 15);
+    dio.options.receiveTimeout = const Duration(seconds: 15);
+    dio.options.sendTimeout = const Duration(seconds: 15);
 
-    dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+    dio.interceptors.add(
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        // ignore: avoid_print
+        logPrint: (object) => print('[DIO] $object'),
+      ),
+    );
 
     return dio;
   });

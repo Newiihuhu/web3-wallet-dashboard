@@ -16,12 +16,20 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   late final DashboardBloc _dashboardBloc;
   bool _isVisible = false;
+  late final ValueNotifier<bool> _visibilityNotifier;
 
   @override
   void initState() {
     super.initState();
     _dashboardBloc = getIt<DashboardBloc>();
+    _visibilityNotifier = ValueNotifier<bool>(_isVisible);
     _dashboardBloc.add(const GetEthBalanceEvent());
+  }
+
+  @override
+  void dispose() {
+    _visibilityNotifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -70,7 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildAddress(state.address, _isVisible),
+                    _buildAddress(state.address),
                     WalletOverviewWidget(
                       walletOverview: state.walletOverview,
                       onRefresh: () {
@@ -115,7 +123,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: 20),
             Text(
-              'กำลังโหลดข้อมูล Wallet...',
+              'Loading Wallet data...',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -124,7 +132,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'กรุณารอสักครู่',
+              'Please wait a moment',
               style: TextStyle(fontSize: 14, color: Colors.grey[400]),
             ),
           ],
@@ -145,7 +153,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
               const SizedBox(height: 16),
               Text(
-                'เกิดข้อผิดพลาด',
+                'Something went wrong',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -167,7 +175,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   backgroundColor: Colors.blue[600],
                   foregroundColor: Colors.white,
                 ),
-                child: const Text('ลองใหม่'),
+                child: const Text('Try again'),
               ),
             ],
           ),
@@ -176,7 +184,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildAddress(String address, bool isVisible) {
+  Widget _buildAddress(String address) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -191,25 +199,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Row(
           children: [
             Expanded(
-              child: Text(
-                isVisible ? address : shortenAddress(address),
-                style: TextStyle(fontSize: 14, color: Colors.white),
-                overflow: TextOverflow.ellipsis,
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _visibilityNotifier,
+                builder: (context, isVisible, child) {
+                  return Text(
+                    isVisible ? address : shortenAddress(address),
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                    overflow: TextOverflow.ellipsis,
+                  );
+                },
               ),
             ),
             const SizedBox(width: 8),
             IconButton(
               onPressed: () {
-                setState(() {
-                  _isVisible = !_isVisible;
-                });
+                _isVisible = !_isVisible;
+                _visibilityNotifier.value = _isVisible;
               },
-              icon: Icon(
-                isVisible
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
-                color: Colors.grey[400],
-                size: 16,
+              icon: ValueListenableBuilder<bool>(
+                valueListenable: _visibilityNotifier,
+                builder: (context, isVisible, child) {
+                  return Icon(
+                    isVisible
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    color: Colors.grey[400],
+                    size: 16,
+                  );
+                },
               ),
             ),
           ],

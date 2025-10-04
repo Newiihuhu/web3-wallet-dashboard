@@ -5,7 +5,6 @@ import 'package:web3_wallet_dashboard/presentation/dashboard_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
-
   runApp(const MyApp());
 }
 

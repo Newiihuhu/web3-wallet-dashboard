@@ -1,4 +1,4 @@
-import 'package:web3_wallet_dashboard/domain/entities/eth_balance_entity.dart';
+import 'package:web3_wallet_dashboard/domain/entities/wallet_overview_entity.dart';
 
 class DashboardState {
   const DashboardState();
@@ -13,8 +13,9 @@ class DashboardLoading extends DashboardState {
 }
 
 class DashboardLoaded extends DashboardState {
-  final EthBalanceEntity ethBalance;
-  const DashboardLoaded({required this.ethBalance});
+  final String address;
+  final WalletOverviewEntity walletOverview;
+  const DashboardLoaded({required this.address, required this.walletOverview});
 }
 
 class DashboardError extends DashboardState {

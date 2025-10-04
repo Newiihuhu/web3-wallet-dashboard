@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web3_wallet_dashboard/common/injection/service_locator.dart';
 import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_state.dart';
+import 'package:web3_wallet_dashboard/presentation/widgets/wallet_overview_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -15,16 +15,13 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   late final DashboardBloc _dashboardBloc;
+  bool _isVisible = false;
 
   @override
   void initState() {
     super.initState();
     _dashboardBloc = getIt<DashboardBloc>();
-    _dashboardBloc.add(
-      const GetEthBalanceEvent(
-        address: '0x86bBF3f5B7fd6bB206f0070fAcF88556aB905088',
-      ),
-    );
+    _dashboardBloc.add(const GetEthBalanceEvent());
   }
 
   @override
@@ -32,12 +29,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return BlocProvider.value(
       value: _dashboardBloc,
       child: Scaffold(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.grey[900],
         appBar: AppBar(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Wallet Dashboard'),
+              Text('Wallet Dashboard', style: TextStyle(color: Colors.white)),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -53,13 +50,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SizedBox(width: 4),
                   Text(
                     'Sepolia Testnet',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 16, color: Colors.grey[400]),
                   ),
                 ],
               ),
             ],
           ),
-          backgroundColor: Colors.grey[300],
+          backgroundColor: Colors.grey[800],
         ),
         body: BlocBuilder<DashboardBloc, DashboardState>(
           builder: (context, state) {
@@ -71,136 +68,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      // decoration: BoxDecoration(
-                      //   borderRadius: BorderRadius.circular(8),
-                      //   border: Border.all(color: Colors.blueGrey[200]!),
-                      //   color: Colors.grey[50],
-                      // ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Address',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                shortenAddress(
-                                  '0x86bBF3f5B7fd6bB206f0070fAcF88556aB905088',
-                                ),
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              const SizedBox(width: 8),
-                              IconButton(
-                                onPressed: () {
-                                  Clipboard.setData(
-                                    ClipboardData(
-                                      text:
-                                          '0x86bBF3f5B7fd6bB206f0070fAcF88556aB905088',
-                                    ),
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Address copied to clipboard',
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.copy,
-                                  color: Colors.blueGrey[500],
-                                  size: 16,
-                                ),
-                              ),
-                              // Icon(
-                              //   Icons.refresh,
-                              //   color: Colors.blueGrey[500],
-                              //   size: 16,
-                              // ),
-                              // const SizedBox(width: 4),
-                              // Text(
-                              //   'Refresh',
-                              //   style: TextStyle(
-                              //     fontSize: 14,
-                              //     color: Colors.blueGrey[500],
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                          // const SizedBox(height: 8),
-                          // Row(
-                          //   children: [
-                          //     Text(
-                          //       'Last sync: 10/01/2025 10:00:00',
-                          //       style: TextStyle(
-                          //         fontSize: 12,
-                          //         color: Colors.grey[600],
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey[200]!),
-                            color: Colors.grey[50],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Wallet Overview',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 8),
-                              const Text(
-                                'Balances',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'ETH:',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(state.ethBalance.balanceETH),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    _buildAddress(state.address, _isVisible),
+                    WalletOverviewWidget(
+                      walletOverview: state.walletOverview,
+                      onRefresh: () {
+                        _dashboardBloc.add(const GetEthBalanceEvent());
+                      },
                     ),
                   ],
                 ),
@@ -210,6 +83,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildAddress(String address, bool isVisible) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Address',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Colors.white,
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                isVisible ? address : shortenAddress(address),
+                style: TextStyle(fontSize: 14, color: Colors.white),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: 8),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _isVisible = !_isVisible;
+                });
+              },
+              icon: Icon(
+                isVisible
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: Colors.grey[400],
+                size: 16,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

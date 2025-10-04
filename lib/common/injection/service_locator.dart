@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3_wallet_dashboard/data/datasources/local/local_storage_datasource.dart';
 import 'package:web3_wallet_dashboard/data/datasources/remote/alchemy_remote_datasource.dart';
 import 'package:web3_wallet_dashboard/data/repositories/web3_wallet_repository_impl.dart';
 import 'package:web3_wallet_dashboard/domain/repositories/web3_wallet_repository.dart';
@@ -36,8 +36,8 @@ Future<void> _registerExternalDependencies() async {
     return dio;
   });
 
-  getIt.registerLazySingleton<SharedPreferences>(
-    () => throw UnimplementedError('SharedPreferences must be initialized'),
+  getIt.registerSingletonAsync<SharedPreferences>(
+    () async => await SharedPreferences.getInstance(),
   );
 }
 
@@ -45,11 +45,18 @@ void _registerDataSources() {
   getIt.registerLazySingleton<AlchemyRemoteDatasource>(
     () => AlchemyRemoteDatasource(dio: getIt<Dio>()),
   );
+
+  getIt.registerLazySingleton<LocalStorageDatasource>(
+    () => LocalStorageDatasource(getIt<SharedPreferences>()),
+  );
 }
 
 void _registerRepositories() {
   getIt.registerLazySingleton<Web3WalletRepository>(
-    () => Web3WalletRepositoryImpl(getIt<AlchemyRemoteDatasource>()),
+    () => Web3WalletRepositoryImpl(
+      getIt<AlchemyRemoteDatasource>(),
+      getIt<LocalStorageDatasource>(),
+    ),
   );
 }
 

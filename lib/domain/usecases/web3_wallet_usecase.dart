@@ -9,4 +9,8 @@ class Web3WalletUsecase {
   Future<EthBalanceEntity> getETHBalance(String address) async {
     return await _ethBalanceRepository.getETHBalance(address);
   }
+
+  Future<String> getWalletAddress() async {
+    return _ethBalanceRepository.getSavedWalletAddress();
+  }
 }

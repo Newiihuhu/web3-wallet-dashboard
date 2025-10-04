@@ -5,7 +5,7 @@ class EthBalanceModel extends EthBalanceEntity {
   final int id;
 
   EthBalanceModel({
-    required super.balanceETH,
+    required super.balance,
     required this.jsonrpc,
     required this.id,
   });
@@ -14,7 +14,7 @@ class EthBalanceModel extends EthBalanceEntity {
     return EthBalanceModel(
       jsonrpc: json['jsonrpc'] as String,
       id: json['id'] as int,
-      balanceETH: json['result'],
+      balance: json['result'],
     );
   }
 }

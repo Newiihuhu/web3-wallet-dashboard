@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:web3_wallet_dashboard/common/injection/service_locator.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:web3_wallet_dashboard/core/config/dotenv_config.dart';
+import 'package:web3_wallet_dashboard/core/injection/service_locator.dart';
 import 'package:web3_wallet_dashboard/presentation/dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDependencies();
+  await dotenv.load(fileName: ".env");
+  final config = DotenvConfig();
+  await initializeDependencies(config);
   runApp(const MyApp());
 }
 

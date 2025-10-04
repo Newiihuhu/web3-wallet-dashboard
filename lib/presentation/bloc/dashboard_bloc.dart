@@ -19,7 +19,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     Emitter<DashboardState> emit,
   ) async {
     emit(DashboardLoading());
-
     try {
       final address = await _walletAddressUsecase.getWalletAddress();
       final balance = await _web3WalletUsecase.getETHBalance(address);
@@ -32,10 +31,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         convertToUSD: convertToUSD,
         totalToken: 10,
       );
-
       emit(DashboardLoaded(address: address, walletOverview: walletOverview));
     } catch (e) {
-      emit(DashboardError(message: 'เกิดข้อผิดพลาด: ${e.toString()}'));
+      emit(DashboardError(message: e.toString()));
     }
   }
 }

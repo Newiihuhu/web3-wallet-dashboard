@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3_wallet_dashboard/common/injection/service_locator.dart';
+import 'package:web3_wallet_dashboard/core/injection/service_locator.dart';
 import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_state.dart';
@@ -160,11 +160,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 8),
               Text(
                 message,
                 style: TextStyle(fontSize: 14, color: Colors.grey[400]),
-                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
               ElevatedButton(

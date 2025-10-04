@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3_wallet_dashboard/core/config/app_config.dart';
 import 'package:web3_wallet_dashboard/data/datasources/local/wallet_address_local_datasource.dart';
-import 'package:web3_wallet_dashboard/data/datasources/remote/alchemy_remote_datasource.dart';
+import 'package:web3_wallet_dashboard/data/datasources/remote/wallet_remote_datasource.dart';
 import 'package:web3_wallet_dashboard/data/repositories/wallet_address_repository_impl.dart';
 import 'package:web3_wallet_dashboard/data/repositories/wallet_overview_repository_impl.dart';
 import 'package:web3_wallet_dashboard/domain/repositories/wallet_address_repository.dart';
@@ -11,9 +12,9 @@ import 'package:web3_wallet_dashboard/domain/usecases/wallet_address_usecase.dar
 import 'package:web3_wallet_dashboard/domain/usecases/wallet_overview_usecase.dart';
 import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_bloc.dart';
 
-/// Global GetIt instance for dependency injection
 final GetIt getIt = GetIt.instance;
-Future<void> initializeDependencies() async {
+Future<void> initializeDependencies(AppConfig config) async {
+  getIt.registerLazySingleton<AppConfig>(() => config);
   await _registerExternalDependencies();
   await _registerDataSources();
   _registerRepositories();
@@ -46,8 +47,11 @@ Future<void> _registerExternalDependencies() async {
 }
 
 Future<void> _registerDataSources() async {
-  getIt.registerLazySingleton<AlchemyRemoteDatasource>(
-    () => AlchemyRemoteDatasource(dio: getIt<Dio>()),
+  getIt.registerLazySingleton<WalletRemoteDatasource>(
+    () => WalletRemoteDatasource(
+      dio: getIt<Dio>(),
+      appConfig: getIt<AppConfig>(),
+    ),
   );
 
   final sharedPreferences = await getIt.getAsync<SharedPreferences>();
@@ -58,7 +62,7 @@ Future<void> _registerDataSources() async {
 
 void _registerRepositories() {
   getIt.registerLazySingleton<WalletOverviewRepository>(
-    () => WalletOverviewRepositoryImpl(getIt<AlchemyRemoteDatasource>()),
+    () => WalletOverviewRepositoryImpl(getIt<WalletRemoteDatasource>()),
   );
   getIt.registerLazySingleton<WalletAddressRepository>(
     () => WalletAddressRepositoryImpl(getIt<WalletAddressLocalDatasource>()),

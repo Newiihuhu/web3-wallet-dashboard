@@ -128,6 +128,11 @@ class WalletOverviewWidget extends StatelessWidget {
           style: TextStyle(fontSize: 10, color: Colors.grey[400]),
         ),
         const SizedBox(width: 8),
+        Text(
+          '10:00:00',
+          style: TextStyle(fontSize: 10, color: Colors.grey[400]),
+        ),
+        const SizedBox(width: 8),
         InkWell(
           onTap: onRefresh,
           child: Row(

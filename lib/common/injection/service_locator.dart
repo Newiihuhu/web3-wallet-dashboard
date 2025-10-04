@@ -1,18 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web3_wallet_dashboard/data/datasources/local/local_storage_datasource.dart';
+import 'package:web3_wallet_dashboard/data/datasources/local/wallet_address_local_datasource.dart';
 import 'package:web3_wallet_dashboard/data/datasources/remote/alchemy_remote_datasource.dart';
-import 'package:web3_wallet_dashboard/data/repositories/web3_wallet_repository_impl.dart';
-import 'package:web3_wallet_dashboard/domain/repositories/web3_wallet_repository.dart';
-import 'package:web3_wallet_dashboard/domain/usecases/web3_wallet_usecase.dart';
+import 'package:web3_wallet_dashboard/data/repositories/wallet_address_repository_impl.dart';
+import 'package:web3_wallet_dashboard/data/repositories/wallet_overview_repository_impl.dart';
+import 'package:web3_wallet_dashboard/domain/repositories/wallet_address_repository.dart';
+import 'package:web3_wallet_dashboard/domain/repositories/wallet_overview_repository.dart';
+import 'package:web3_wallet_dashboard/domain/usecases/wallet_address_usecase.dart';
+import 'package:web3_wallet_dashboard/domain/usecases/wallet_overview_usecase.dart';
 import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_bloc.dart';
 
 /// Global GetIt instance for dependency injection
 final GetIt getIt = GetIt.instance;
 Future<void> initializeDependencies() async {
   await _registerExternalDependencies();
-  _registerDataSources();
+  await _registerDataSources();
   _registerRepositories();
   _registerUseCases();
   _registerBlocs();
@@ -25,13 +28,7 @@ Future<void> _registerExternalDependencies() async {
     dio.options.receiveTimeout = const Duration(seconds: 30);
     dio.options.sendTimeout = const Duration(seconds: 30);
 
-    dio.interceptors.add(
-      LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        // logPrint: (object) => debugPrint(object.toString()),
-      ),
-    );
+    dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
 
     return dio;
   });
@@ -41,71 +38,44 @@ Future<void> _registerExternalDependencies() async {
   );
 }
 
-void _registerDataSources() {
+Future<void> _registerDataSources() async {
   getIt.registerLazySingleton<AlchemyRemoteDatasource>(
     () => AlchemyRemoteDatasource(dio: getIt<Dio>()),
   );
 
-  getIt.registerLazySingleton<LocalStorageDatasource>(
-    () => LocalStorageDatasource(getIt<SharedPreferences>()),
+  final sharedPreferences = await getIt.getAsync<SharedPreferences>();
+  getIt.registerLazySingleton<WalletAddressLocalDatasource>(
+    () => WalletAddressLocalDatasource(sharedPreferences),
   );
 }
 
 void _registerRepositories() {
-  getIt.registerLazySingleton<Web3WalletRepository>(
-    () => Web3WalletRepositoryImpl(
-      getIt<AlchemyRemoteDatasource>(),
-      getIt<LocalStorageDatasource>(),
-    ),
+  getIt.registerLazySingleton<WalletOverviewRepository>(
+    () => WalletOverviewRepositoryImpl(getIt<AlchemyRemoteDatasource>()),
+  );
+  getIt.registerLazySingleton<WalletAddressRepository>(
+    () => WalletAddressRepositoryImpl(getIt<WalletAddressLocalDatasource>()),
   );
 }
 
 void _registerUseCases() {
-  getIt.registerLazySingleton<Web3WalletUsecase>(
-    () => Web3WalletUsecase(getIt<Web3WalletRepository>()),
+  getIt.registerLazySingleton<WalletOverviewUsecase>(
+    () => WalletOverviewUsecase(getIt<WalletOverviewRepository>()),
+  );
+  getIt.registerLazySingleton<WalletAddressUsecase>(
+    () => WalletAddressUsecase(getIt<WalletAddressRepository>()),
   );
 }
 
 void _registerBlocs() {
   getIt.registerFactory<DashboardBloc>(
-    () => DashboardBloc(getIt<Web3WalletUsecase>()),
+    () => DashboardBloc(
+      getIt<WalletOverviewUsecase>(),
+      getIt<WalletAddressUsecase>(),
+    ),
   );
 }
 
 Future<void> resetDependencies() async {
   await getIt.reset();
 }
-
-/// Usage Examples:
-/// 
-/// 1. Get a singleton instance:
-/// ```dart
-/// final dio = getIt<Dio>();
-/// final repository = getIt<Web3WalletRepository>();
-/// ```
-/// 
-/// 2. Get a factory instance (creates new instance each time):
-/// ```dart
-/// final bloc = getIt<DashboardBloc>();
-/// ```
-/// 
-/// 3. Check if a dependency is registered:
-/// ```dart
-/// if (getIt.isRegistered<Dio>()) {
-///   final dio = getIt<Dio>();
-/// }
-/// ```
-/// 
-/// 4. Get dependencies in a widget:
-/// ```dart
-/// class MyWidget extends StatelessWidget {
-///   @override
-///   Widget build(BuildContext context) {
-///     final bloc = getIt<DashboardBloc>();
-///     return BlocProvider.value(
-///       value: bloc,
-///       child: // your widget tree
-///     );
-///   }
-/// }
-/// ```

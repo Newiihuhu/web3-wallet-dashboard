@@ -35,16 +35,16 @@ void main() {
         isFromRemote: false,
       );
 
-      test('should return cached data when available and fresh', () async {
-        // Arrange
+      test('should return local balance when available and fresh', () async {
+        // Given
         when(() => mockLocalDatasource.hasBalanceData()).thenReturn(true);
         when(() => mockLocalDatasource.isBalanceDataFresh()).thenReturn(true);
         when(() => mockLocalDatasource.getETHBalance()).thenReturn(testBalance);
 
-        // Act
+        // When
         final result = await repository.getETHBalance(testAddress);
 
-        // Assert
+        // Then
         expect(result, testBalance);
         expect(result.isFromRemote, false);
         verify(() => mockLocalDatasource.hasBalanceData()).called(1);
@@ -53,8 +53,8 @@ void main() {
         verifyNever(() => mockRemoteDatasource.getETHBalance(any()));
       });
 
-      test('should return cached data when available but not fresh', () async {
-        // Arrange
+      test('should return local balance when available but not fresh', () async {
+        // Given
         final remoteBalance = EthBalanceModel(
           balance: '0x9876543210fedcba',
           jsonrpc: '2.0',
@@ -71,10 +71,10 @@ void main() {
           () => mockLocalDatasource.saveETHBalance(any()),
         ).thenAnswer((_) async => true);
 
-        // Act
+        // When
         final result = await repository.getETHBalance(testAddress);
 
-        // Assert
+        // Then
         expect(result, remoteBalance);
         expect(result.isFromRemote, true);
         verify(() => mockLocalDatasource.hasBalanceData()).called(1);
@@ -85,8 +85,8 @@ void main() {
         ).called(1);
       });
 
-      test('should fetch from remote when no cached data exists', () async {
-        // Arrange
+      test('should fetch from remote when no local balance exists', () async {
+        // Given
         final remoteBalance = EthBalanceModel(
           balance: '0x9876543210fedcba',
           jsonrpc: '2.0',
@@ -102,10 +102,10 @@ void main() {
           () => mockLocalDatasource.saveETHBalance(any()),
         ).thenAnswer((_) async => true);
 
-        // Act
+        // When
         final result = await repository.getETHBalance(testAddress);
 
-        // Assert
+        // Then
         expect(result, remoteBalance);
         expect(result.isFromRemote, true);
         verify(() => mockLocalDatasource.hasBalanceData()).called(1);
@@ -116,8 +116,8 @@ void main() {
         ).called(1);
       });
 
-      test('should fetch from remote when cached data is null', () async {
-        // Arrange
+      test('should fetch from remote when local balance is null', () async {
+        // Given
         final remoteBalance = EthBalanceModel(
           balance: '0x9876543210fedcba',
           jsonrpc: '2.0',
@@ -135,10 +135,10 @@ void main() {
           () => mockLocalDatasource.saveETHBalance(any()),
         ).thenAnswer((_) async => true);
 
-        // Act
+        // When
         final result = await repository.getETHBalance(testAddress);
 
-        // Assert
+        // Then
         expect(result, remoteBalance);
         expect(result.isFromRemote, true);
         verify(() => mockLocalDatasource.hasBalanceData()).called(1);
@@ -151,13 +151,13 @@ void main() {
       });
 
       test('should propagate remote datasource exceptions', () async {
-        // Arrange
+          // Given
         when(() => mockLocalDatasource.hasBalanceData()).thenReturn(false);
         when(
           () => mockRemoteDatasource.getETHBalance(testAddress),
         ).thenThrow(Exception('Network error'));
 
-        // Act & Assert
+        // When & Then
         expect(
           () => repository.getETHBalance(testAddress),
           throwsA(isA<Exception>()),
@@ -168,8 +168,8 @@ void main() {
         verifyNever(() => mockLocalDatasource.saveETHBalance(any()));
       });
 
-      test('should handle save failure gracefully', () async {
-        // Arrange
+      test('should handle save failure', () async {
+        // Given
         final remoteBalance = EthBalanceModel(
           balance: '0x9876543210fedcba',
           jsonrpc: '2.0',
@@ -185,89 +185,16 @@ void main() {
           () => mockLocalDatasource.saveETHBalance(any()),
         ).thenAnswer((_) async => false);
 
-        // Act
+        // When
         final result = await repository.getETHBalance(testAddress);
 
-        // Assert
+        // Then
         expect(result, remoteBalance);
         expect(result.isFromRemote, true);
         verify(
           () => mockLocalDatasource.saveETHBalance(remoteBalance),
         ).called(1);
       });
-    });
-
-    group('Integration scenarios', () {
-      const testAddress = '0x1234567890abcdef';
-
-      test(
-        'should handle complete flow: no cache -> fetch -> save -> return',
-        () async {
-          // Arrange
-          final remoteBalance = EthBalanceModel(
-            balance: '0x9876543210fedcba',
-            jsonrpc: '2.0',
-            id: 1,
-            isFromRemote: true,
-          );
-
-          when(() => mockLocalDatasource.hasBalanceData()).thenReturn(false);
-          when(
-            () => mockRemoteDatasource.getETHBalance(testAddress),
-          ).thenAnswer((_) async => remoteBalance);
-          when(
-            () => mockLocalDatasource.saveETHBalance(any()),
-          ).thenAnswer((_) async => true);
-
-          // Act
-          final result = await repository.getETHBalance(testAddress);
-
-          // Assert
-          expect(result, remoteBalance);
-          expect(result.isFromRemote, true);
-
-          // Verify the complete flow
-          verify(() => mockLocalDatasource.hasBalanceData()).called(1);
-          verify(
-            () => mockRemoteDatasource.getETHBalance(testAddress),
-          ).called(1);
-          verify(
-            () => mockLocalDatasource.saveETHBalance(remoteBalance),
-          ).called(1);
-        },
-      );
-
-      test(
-        'should handle complete flow: fresh cache -> return cached data',
-        () async {
-          // Arrange
-          final cachedBalance = EthBalanceEntity(
-            balance: '0x1234567890abcdef',
-            lastUpdated: DateTime.now(),
-            isFromRemote: false,
-          );
-
-          when(() => mockLocalDatasource.hasBalanceData()).thenReturn(true);
-          when(() => mockLocalDatasource.isBalanceDataFresh()).thenReturn(true);
-          when(
-            () => mockLocalDatasource.getETHBalance(),
-          ).thenReturn(cachedBalance);
-
-          // Act
-          final result = await repository.getETHBalance(testAddress);
-
-          // Assert
-          expect(result, cachedBalance);
-          expect(result.isFromRemote, false);
-
-          // Verify the complete flow
-          verify(() => mockLocalDatasource.hasBalanceData()).called(1);
-          verify(() => mockLocalDatasource.isBalanceDataFresh()).called(1);
-          verify(() => mockLocalDatasource.getETHBalance()).called(1);
-          verifyNever(() => mockRemoteDatasource.getETHBalance(any()));
-          verifyNever(() => mockLocalDatasource.saveETHBalance(any()));
-        },
-      );
     });
   });
 }

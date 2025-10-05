@@ -13,9 +13,9 @@ class WalletOverviewRepositoryImpl implements WalletOverviewRepository {
   Future<EthBalanceEntity> getETHBalance(String address) async {
     if (_localDatasource.hasBalanceData()) {
       if (_localDatasource.isBalanceDataFresh()) {
-        final cachedBalance = _localDatasource.getETHBalance();
-        if (cachedBalance != null) {
-          return cachedBalance;
+        final localBalance = _localDatasource.getETHBalance();
+        if (localBalance != null) {
+          return localBalance;
         }
       }
     }

@@ -31,7 +31,13 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         convertToUSD: convertToUSD,
         totalToken: 10,
       );
-      emit(DashboardLoaded(address: address, walletOverview: walletOverview));
+      emit(
+        DashboardLoaded(
+          address: address,
+          walletOverview: walletOverview,
+          isFromCache: !balance.isFromRemote,
+        ),
+      );
     } catch (e) {
       emit(DashboardError(message: e.toString()));
     }

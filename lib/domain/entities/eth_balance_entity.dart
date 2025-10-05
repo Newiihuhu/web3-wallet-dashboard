@@ -1,7 +1,13 @@
 class EthBalanceEntity {
   final String balance;
+  final DateTime? lastUpdated;
+  final bool isFromRemote;
 
-  EthBalanceEntity({required this.balance});
+  EthBalanceEntity({
+    required this.balance,
+    this.lastUpdated,
+    this.isFromRemote = false,
+  });
 
   double convertWeiToETH() {
     return balance.hexToTokenAmount(18);

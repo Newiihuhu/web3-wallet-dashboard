@@ -1,16 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:web3_wallet_dashboard/core/config/app_config.dart';
 import 'package:web3_wallet_dashboard/core/exception/app_exception.dart';
 import 'package:web3_wallet_dashboard/data/datasources/remote/wallet_remote_datasource.dart';
 import 'package:web3_wallet_dashboard/data/models/eth_balance_model.dart';
 
 import '../../model/__mock__/eth_balance_data_mock.dart';
+import '__mock__/app_config_mock.dart';
+import '__mock__/dio_mock.dart';
 
-class MockDio extends Mock implements Dio {}
-
-class MockAppConfig extends Mock implements AppConfig {}
 
 void main() {
   late MockDio dio;

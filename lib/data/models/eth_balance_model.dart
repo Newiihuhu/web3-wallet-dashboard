@@ -8,6 +8,8 @@ class EthBalanceModel extends EthBalanceEntity {
     required super.balance,
     required this.jsonrpc,
     required this.id,
+    super.lastUpdated,
+    super.isFromRemote = true,
   });
 
   factory EthBalanceModel.fromJson(Map<String, dynamic> json) {

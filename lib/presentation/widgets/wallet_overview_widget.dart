@@ -7,9 +7,11 @@ class WalletOverviewWidget extends StatelessWidget {
     super.key,
     required this.walletOverview,
     required this.onRefresh,
+    this.isFromCache = false,
   });
   final WalletOverviewEntity walletOverview;
   final Function() onRefresh;
+  final bool isFromCache;
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +125,24 @@ class WalletOverviewWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        // Cache status indicator
+        if (isFromCache) ...[
+          Icon(Icons.cached, color: Colors.orange[400], size: 12),
+          const SizedBox(width: 4),
+          Text(
+            'Cached',
+            style: TextStyle(fontSize: 10, color: Colors.orange[400]),
+          ),
+          const SizedBox(width: 8),
+        ] else ...[
+          Icon(Icons.cloud_done, color: Colors.green[400], size: 12),
+          const SizedBox(width: 4),
+          Text(
+            'Live',
+            style: TextStyle(fontSize: 10, color: Colors.green[400]),
+          ),
+          const SizedBox(width: 8),
+        ],
         Text(
           DashboardConstant.lastSync,
           style: TextStyle(fontSize: 10, color: Colors.grey[400]),

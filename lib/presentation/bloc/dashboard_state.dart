@@ -15,7 +15,12 @@ class DashboardLoading extends DashboardState {
 class DashboardLoaded extends DashboardState {
   final String address;
   final WalletOverviewEntity walletOverview;
-  const DashboardLoaded({required this.address, required this.walletOverview});
+  final bool isFromCache;
+  const DashboardLoaded({
+    required this.address,
+    required this.walletOverview,
+    this.isFromCache = false,
+  });
 }
 
 class DashboardError extends DashboardState {

@@ -81,6 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     _buildAddress(state.address),
                     WalletOverviewWidget(
                       walletOverview: state.walletOverview,
+                      isFromCache: state.isFromCache,
                       onRefresh: () {
                         _dashboardBloc.add(const GetEthBalanceEvent());
                       },

@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3_wallet_dashboard/core/config/app_config.dart';
 import 'package:web3_wallet_dashboard/data/datasources/local/wallet_address_local_datasource.dart';
+import 'package:web3_wallet_dashboard/data/datasources/local/wallet_overview_local_datasource.dart';
 import 'package:web3_wallet_dashboard/data/datasources/remote/wallet_remote_datasource.dart';
 import 'package:web3_wallet_dashboard/data/repositories/wallet_address_repository_impl.dart';
 import 'package:web3_wallet_dashboard/data/repositories/wallet_overview_repository_impl.dart';
@@ -58,11 +59,17 @@ Future<void> _registerDataSources() async {
   getIt.registerLazySingleton<WalletAddressLocalDatasource>(
     () => WalletAddressLocalDatasource(sharedPreferences),
   );
+  getIt.registerLazySingleton<WalletOverviewLocalDatasource>(
+    () => WalletOverviewLocalDatasource(sharedPreferences),
+  );
 }
 
 void _registerRepositories() {
   getIt.registerLazySingleton<WalletOverviewRepository>(
-    () => WalletOverviewRepositoryImpl(getIt<WalletRemoteDatasource>()),
+    () => WalletOverviewRepositoryImpl(
+      getIt<WalletRemoteDatasource>(),
+      getIt<WalletOverviewLocalDatasource>(),
+    ),
   );
   getIt.registerLazySingleton<WalletAddressRepository>(
     () => WalletAddressRepositoryImpl(getIt<WalletAddressLocalDatasource>()),

@@ -1,3 +1,5 @@
+import 'package:web3_wallet_dashboard/core/utils/formatter.dart';
+
 class EthBalanceEntity {
   final String balance;
   final DateTime? lastUpdated;
@@ -10,20 +12,12 @@ class EthBalanceEntity {
   });
 
   double convertWeiToETH() {
-    return balance.hexToTokenAmount(18);
+    return hexToAmount(balance, 18);
   }
 
   double convertToUSD() {
+    // rate is 4544.75
     double ethAmount = convertWeiToETH();
-    return ethAmount * 4521.77;
-  }
-}
-
-extension StringHexConversion on String {
-  double hexToTokenAmount(int decimals) {
-    final cleaned = startsWith("0x") ? substring(2) : this;
-    final raw = BigInt.parse(cleaned, radix: 16);
-
-    return raw / BigInt.from(10).pow(decimals);
+    return ethAmount * 4544.75;
   }
 }

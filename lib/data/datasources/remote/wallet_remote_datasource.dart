@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:web3_wallet_dashboard/core/config/app_config.dart';
+import 'package:web3_wallet_dashboard/core/constants/wallet_constants.dart';
 import 'package:web3_wallet_dashboard/core/exception/app_exception.dart';
 import 'package:web3_wallet_dashboard/data/models/eth_balance_model.dart';
 
@@ -28,9 +29,9 @@ class WalletRemoteDatasource {
       return EthBalanceModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        throw AuthenticationException('API key invalid');
+        throw AuthenticationException(WalletConstants.authenticationException);
       }
-      throw NetworkException('Network error');
+      throw NetworkException(WalletConstants.networkException);
     }
   }
 }

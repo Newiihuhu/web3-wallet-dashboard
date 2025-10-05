@@ -1,3 +1,5 @@
+import 'package:web3_wallet_dashboard/core/constants/wallet_constants.dart';
+import 'package:web3_wallet_dashboard/core/exception/app_exception.dart';
 import 'package:web3_wallet_dashboard/data/datasources/local/wallet_address_local_datasource.dart';
 import 'package:web3_wallet_dashboard/domain/repositories/wallet_address_repository.dart';
 
@@ -10,11 +12,17 @@ class WalletAddressRepositoryImpl implements WalletAddressRepository {
   Future<String> getSavedWalletAddress() async {
     if (!hasSavedWalletAddress()) {
       await _localStorageDatasource.saveWalletAddress(
-        '0x86bBF3f5B7fd6bB206f0070fAcF88556aB905088',
+        WalletConstants.defaultWalletAddress,
       );
     }
+
     final savedAddress = _localStorageDatasource.getWalletAddress();
-    return savedAddress!;
+
+    if (savedAddress == null || savedAddress.isEmpty) {
+      throw AddressNotFoundException(WalletConstants.addressNotFoundException);
+    }
+
+    return savedAddress;
   }
 
   @override

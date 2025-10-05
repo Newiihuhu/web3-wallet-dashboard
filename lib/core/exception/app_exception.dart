@@ -8,8 +8,8 @@ abstract class AppException implements Exception {
   String toString() => message;
 }
 
-class AddressEmptyException extends AppException {
-  const AddressEmptyException(super.message, {super.code});
+class AddressNotFoundException extends AppException {
+  const AddressNotFoundException(super.message, {super.code});
 }
 
 class AuthenticationException extends AppException {

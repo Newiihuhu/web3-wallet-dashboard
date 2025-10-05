@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web3_wallet/core/injection/service_locator.dart';
+import 'package:web3_wallet/core/theme/app_theme.dart';
 import 'package:web3_wallet/presentation/bloc/dashboard_bloc.dart';
 import 'package:web3_wallet/presentation/bloc/dashboard_event.dart';
 import 'package:web3_wallet/presentation/bloc/dashboard_state.dart';
 import 'package:web3_wallet/presentation/widgets/dashboard_error_widget.dart';
 import 'package:web3_wallet/presentation/widgets/dashboard_loading_widget.dart';
+import 'package:web3_wallet/presentation/widgets/tokens_list_widget.dart';
 import 'package:web3_wallet/presentation/widgets/wallet_overview_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -39,12 +41,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return BlocProvider.value(
       value: _dashboardBloc,
       child: Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: AppTheme.darkBackground,
         appBar: AppBar(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Wallet Dashboard', style: TextStyle(color: Colors.white)),
+              Text(
+                'Wallet Dashboard',
+                style: TextStyle(color: AppTheme.primaryText),
+              ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -53,51 +58,57 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     height: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors
-                          .green, // You can change this based on network status
+                      color: AppTheme.successGreen,
                     ),
                   ),
                   const SizedBox(width: 4),
                   Text(
                     'Sepolia Testnet',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[400]),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppTheme.secondaryText,
+                    ),
                   ),
                 ],
               ),
             ],
           ),
-          backgroundColor: Colors.grey[800],
+          backgroundColor: AppTheme.cardBackground,
         ),
-        body: BlocBuilder<DashboardBloc, DashboardState>(
-          builder: (context, state) {
-            if (state is DashboardLoading) {
-              return DashboardLoadingWidget();
-            } else if (state is DashboardError) {
-              return DashboardErrorWidget(
-                onRefresh: () {
-                  _dashboardBloc.add(const GetEthBalanceEvent());
-                },
-              );
-            } else if (state is DashboardLoaded) {
-              return Container(
-                margin: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildAddress(state.address),
-                    WalletOverviewWidget(
-                      walletOverview: state.walletOverview,
-                      isFromCache: state.isFromCache,
-                      onRefresh: () {
-                        _dashboardBloc.add(const GetEthBalanceEvent());
-                      },
-                    ),
-                  ],
-                ),
-              );
-            }
-            return const SizedBox.shrink();
-          },
+        body: SafeArea(
+          child: BlocBuilder<DashboardBloc, DashboardState>(
+            builder: (context, state) {
+              if (state is DashboardLoading) {
+                return DashboardLoadingWidget();
+              } else if (state is DashboardError) {
+                return DashboardErrorWidget(
+                  onRefresh: () {
+                    _dashboardBloc.add(const GetEthBalanceEvent());
+                  },
+                );
+              } else if (state is DashboardLoaded) {
+                return Container(
+                  margin: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildAddress(state.address),
+                      WalletOverviewWidget(
+                        walletOverview: state.walletOverview,
+                        isFromCache: state.isFromCache,
+                        onRefresh: () {
+                          _dashboardBloc.add(const GetEthBalanceEvent());
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(child: TokensListWidget(tokens: state.tokens)),
+                    ],
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );
@@ -112,7 +123,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
-            color: Colors.white,
+            color: AppTheme.primaryText,
           ),
         ),
         Row(
@@ -123,7 +134,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 builder: (context, isVisible, child) {
                   return Text(
                     isVisible ? address : shortenAddress(address),
-                    style: TextStyle(fontSize: 14, color: Colors.white),
+                    style: TextStyle(fontSize: 14, color: AppTheme.primaryText),
                     overflow: TextOverflow.ellipsis,
                   );
                 },
@@ -142,7 +153,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     isVisible
                         ? Icons.visibility_outlined
                         : Icons.visibility_off_outlined,
-                    color: Colors.grey[400],
+                    color: AppTheme.secondaryText,
                     size: 16,
                   );
                 },

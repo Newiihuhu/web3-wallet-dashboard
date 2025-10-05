@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web3_wallet/core/theme/app_theme.dart';
 import 'package:web3_wallet/domain/entities/wallet_overview_entity.dart';
 import 'package:web3_wallet/presentation/dashboard_constant.dart';
 
@@ -23,8 +24,8 @@ class WalletOverviewWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey[700]!),
-            color: Colors.grey[800],
+            border: Border.all(color: AppTheme.borderColor),
+            color: AppTheme.cardBackground,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +38,7 @@ class WalletOverviewWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppTheme.primaryText,
                     ),
                   ),
                 ],
@@ -47,8 +48,7 @@ class WalletOverviewWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  // ignore: deprecated_member_use
-                  color: Colors.grey[600]?.withOpacity(0.3),
+                  color: AppTheme.surfaceBackground.withOpacity(0.3),
                 ),
                 child: Column(
                   children: [
@@ -56,7 +56,10 @@ class WalletOverviewWidget extends StatelessWidget {
                       children: [
                         Text(
                           DashboardConstant.totalValue,
-                          style: TextStyle(fontSize: 14, color: Colors.white),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.primaryText,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -66,7 +69,7 @@ class WalletOverviewWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: AppTheme.primaryText,
                           ),
                         ),
                       ],
@@ -77,12 +80,18 @@ class WalletOverviewWidget extends StatelessWidget {
                       children: [
                         Text(
                           DashboardConstant.eth,
-                          style: TextStyle(fontSize: 14, color: Colors.white),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.primaryText,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           walletOverview.ethBalance.toString(),
-                          style: TextStyle(fontSize: 14, color: Colors.white),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.primaryText,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -92,7 +101,7 @@ class WalletOverviewWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: Colors.green[400],
+                            color: AppTheme.successGreen,
                           ),
                         ),
                       ],
@@ -102,12 +111,18 @@ class WalletOverviewWidget extends StatelessWidget {
                       children: [
                         Text(
                           DashboardConstant.totalTokens,
-                          style: TextStyle(fontSize: 14, color: Colors.white),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.primaryText,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           walletOverview.totalToken.toString(),
-                          style: TextStyle(fontSize: 14, color: Colors.white),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.primaryText,
+                          ),
                         ),
                       ],
                     ),
@@ -127,42 +142,50 @@ class WalletOverviewWidget extends StatelessWidget {
       children: [
         // Cache status indicator
         if (isFromCache) ...[
-          Icon(Icons.cached, color: Colors.orange[400], size: 12),
+          Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppTheme.warningOrange,
+            ),
+          ),
+          // Icon(Icons.cached, color: Colors.orange[400], size: 12),
           const SizedBox(width: 4),
           Text(
             'Cached',
-            style: TextStyle(fontSize: 10, color: Colors.orange[400]),
+            style: TextStyle(fontSize: 10, color: AppTheme.warningOrange),
           ),
           const SizedBox(width: 8),
         ] else ...[
-          Icon(Icons.cloud_done, color: Colors.green[400], size: 12),
+          Icon(Icons.cloud_done, color: AppTheme.successGreen, size: 12),
           const SizedBox(width: 4),
           Text(
             'Live',
-            style: TextStyle(fontSize: 10, color: Colors.green[400]),
+            style: TextStyle(fontSize: 10, color: AppTheme.successGreen),
           ),
           const SizedBox(width: 8),
         ],
-        Text(
-          DashboardConstant.lastSync,
-          style: TextStyle(fontSize: 10, color: Colors.grey[400]),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          '10:00:00',
-          style: TextStyle(fontSize: 10, color: Colors.grey[400]),
-        ),
-        const SizedBox(width: 8),
+        // Text(
+        //   DashboardConstant.lastSync,
+        //   style: TextStyle(fontSize: 10, color: Colors.grey[400]),
+        // ),
+        // const SizedBox(width: 8),
+        // Text(
+        //   '10:00:00',
+        //   style: TextStyle(fontSize: 10, color: Colors.grey[400]),
+        // ),
+        // const SizedBox(width: 8),
         InkWell(
           onTap: onRefresh,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.refresh, color: Colors.grey[600], size: 16),
+              Icon(Icons.refresh, color: AppTheme.secondaryText, size: 16),
               const SizedBox(width: 4),
               Text(
                 DashboardConstant.refresh,
-                style: TextStyle(fontSize: 12, color: Colors.grey[400]),
+                style: TextStyle(fontSize: 12, color: AppTheme.secondaryText),
               ),
             ],
           ),

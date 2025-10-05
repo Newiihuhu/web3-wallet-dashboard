@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web3_wallet/core/theme/app_theme.dart';
 import 'package:web3_wallet/presentation/dashboard_constant.dart';
 
 class DashboardLoadingWidget extends StatelessWidget {
@@ -7,7 +8,7 @@ class DashboardLoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[900],
+      color: AppTheme.darkBackground,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -17,15 +18,13 @@ class DashboardLoadingWidget extends StatelessWidget {
               height: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [Colors.blue[400]!, Colors.purple[400]!],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                gradient: AppTheme.primaryGradient,
               ),
               child: const Center(
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppTheme.primaryText,
+                  ),
                   strokeWidth: 3,
                 ),
               ),
@@ -36,13 +35,13 @@ class DashboardLoadingWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: AppTheme.primaryText,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               DashboardConstant.pleaseWaitAMoment,
-              style: TextStyle(fontSize: 14, color: Colors.grey[400]),
+              style: TextStyle(fontSize: 14, color: AppTheme.secondaryText),
             ),
           ],
         ),

@@ -1,4 +1,4 @@
-import 'package:web3_wallet_dashboard/core/utils/formatter.dart';
+import 'package:web3_wallet/core/utils/formatter.dart';
 
 class EthBalanceEntity {
   final String balance;

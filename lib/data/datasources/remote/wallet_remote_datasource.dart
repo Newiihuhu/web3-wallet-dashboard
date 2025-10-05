@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:web3_wallet_dashboard/core/config/app_config.dart';
-import 'package:web3_wallet_dashboard/core/constants/wallet_constants.dart';
-import 'package:web3_wallet_dashboard/core/exception/app_exception.dart';
-import 'package:web3_wallet_dashboard/data/models/eth_balance_model.dart';
+import 'package:web3_wallet/core/config/app_config.dart';
+import 'package:web3_wallet/core/constants/wallet_constants.dart';
+import 'package:web3_wallet/core/exception/app_exception.dart';
+import 'package:web3_wallet/data/models/eth_balance_model.dart';
 
 class WalletRemoteDatasource {
   final Dio dio;

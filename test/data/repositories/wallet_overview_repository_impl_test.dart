@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:web3_wallet_dashboard/data/models/eth_balance_model.dart';
-import 'package:web3_wallet_dashboard/data/repositories/wallet_overview_repository_impl.dart';
-import 'package:web3_wallet_dashboard/domain/entities/eth_balance_entity.dart';
+import 'package:web3_wallet/data/models/eth_balance_model.dart';
+import 'package:web3_wallet/data/repositories/wallet_overview_repository_impl.dart';
+import 'package:web3_wallet/domain/entities/eth_balance_entity.dart';
 
 import '../datasource/local/__mock__/wallet_overview_local_datasource_mock.dart';
 import '../datasource/remote/__mock__/wallet_remote_datasource_mock.dart';

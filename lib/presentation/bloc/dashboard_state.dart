@@ -1,4 +1,4 @@
-import 'package:web3_wallet_dashboard/domain/entities/wallet_overview_entity.dart';
+import 'package:web3_wallet/domain/entities/wallet_overview_entity.dart';
 
 class DashboardState {
   const DashboardState();

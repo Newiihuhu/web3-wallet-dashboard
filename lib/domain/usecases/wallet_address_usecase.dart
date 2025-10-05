@@ -1,4 +1,4 @@
-import 'package:web3_wallet_dashboard/domain/repositories/wallet_address_repository.dart';
+import 'package:web3_wallet/domain/repositories/wallet_address_repository.dart';
 
 class WalletAddressUsecase {
   final WalletAddressRepository _web3WalletRepository;

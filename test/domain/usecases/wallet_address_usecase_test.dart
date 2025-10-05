@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:web3_wallet_dashboard/domain/usecases/wallet_address_usecase.dart';
+import 'package:web3_wallet/domain/usecases/wallet_address_usecase.dart';
 
 import '../../data/repositories/__mock__/wallet_address_repository_mock.dart';
 

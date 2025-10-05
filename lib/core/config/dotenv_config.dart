@@ -1,5 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:web3_wallet_dashboard/core/config/app_config.dart';
+import 'package:web3_wallet/core/config/app_config.dart';
 
 class DotenvConfig implements AppConfig {
   @override

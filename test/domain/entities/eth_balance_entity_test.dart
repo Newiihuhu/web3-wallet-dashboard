@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:web3_wallet_dashboard/domain/entities/eth_balance_entity.dart';
+import 'package:web3_wallet/domain/entities/eth_balance_entity.dart';
 
 void main() {
   group('EthBalanceEntity', () {

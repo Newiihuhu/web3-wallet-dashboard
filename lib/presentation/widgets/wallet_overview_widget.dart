@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:web3_wallet_dashboard/domain/entities/wallet_overview_entity.dart';
-import 'package:web3_wallet_dashboard/presentation/dashboard_constant.dart';
+import 'package:web3_wallet/domain/entities/wallet_overview_entity.dart';
+import 'package:web3_wallet/presentation/dashboard_constant.dart';
 
 class WalletOverviewWidget extends StatelessWidget {
   const WalletOverviewWidget({

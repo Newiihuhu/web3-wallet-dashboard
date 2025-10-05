@@ -1,17 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web3_wallet_dashboard/core/config/app_config.dart';
-import 'package:web3_wallet_dashboard/data/datasources/local/wallet_address_local_datasource.dart';
-import 'package:web3_wallet_dashboard/data/datasources/local/wallet_overview_local_datasource.dart';
-import 'package:web3_wallet_dashboard/data/datasources/remote/wallet_remote_datasource.dart';
-import 'package:web3_wallet_dashboard/data/repositories/wallet_address_repository_impl.dart';
-import 'package:web3_wallet_dashboard/data/repositories/wallet_overview_repository_impl.dart';
-import 'package:web3_wallet_dashboard/domain/repositories/wallet_address_repository.dart';
-import 'package:web3_wallet_dashboard/domain/repositories/wallet_overview_repository.dart';
-import 'package:web3_wallet_dashboard/domain/usecases/wallet_address_usecase.dart';
-import 'package:web3_wallet_dashboard/domain/usecases/wallet_overview_usecase.dart';
-import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:web3_wallet/core/config/app_config.dart';
+import 'package:web3_wallet/data/datasources/local/wallet_address_local_datasource.dart';
+import 'package:web3_wallet/data/datasources/local/wallet_overview_local_datasource.dart';
+import 'package:web3_wallet/data/datasources/remote/wallet_remote_datasource.dart';
+import 'package:web3_wallet/data/repositories/wallet_address_repository_impl.dart';
+import 'package:web3_wallet/data/repositories/wallet_overview_repository_impl.dart';
+import 'package:web3_wallet/domain/repositories/wallet_address_repository.dart';
+import 'package:web3_wallet/domain/repositories/wallet_overview_repository.dart';
+import 'package:web3_wallet/domain/usecases/wallet_address_usecase.dart';
+import 'package:web3_wallet/domain/usecases/wallet_overview_usecase.dart';
+import 'package:web3_wallet/presentation/bloc/dashboard_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 Future<void> initializeDependencies(AppConfig config) async {

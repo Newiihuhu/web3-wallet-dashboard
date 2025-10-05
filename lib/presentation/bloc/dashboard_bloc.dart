@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3_wallet_dashboard/domain/entities/wallet_overview_entity.dart';
-import 'package:web3_wallet_dashboard/domain/usecases/wallet_address_usecase.dart';
-import 'package:web3_wallet_dashboard/domain/usecases/wallet_overview_usecase.dart';
-import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_event.dart';
-import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_state.dart';
+import 'package:web3_wallet/domain/entities/wallet_overview_entity.dart';
+import 'package:web3_wallet/domain/usecases/wallet_address_usecase.dart';
+import 'package:web3_wallet/domain/usecases/wallet_overview_usecase.dart';
+import 'package:web3_wallet/presentation/bloc/dashboard_event.dart';
+import 'package:web3_wallet/presentation/bloc/dashboard_state.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final WalletOverviewUsecase _web3WalletUsecase;

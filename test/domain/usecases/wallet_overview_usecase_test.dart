@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:web3_wallet_dashboard/domain/entities/eth_balance_entity.dart';
-import 'package:web3_wallet_dashboard/domain/usecases/wallet_overview_usecase.dart';
+import 'package:web3_wallet/domain/entities/eth_balance_entity.dart';
+import 'package:web3_wallet/domain/usecases/wallet_overview_usecase.dart';
 
 import '../../data/repositories/__mock__/wallet_overview_repository_mock.dart';
 

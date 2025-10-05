@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:web3_wallet_dashboard/core/config/dotenv_config.dart';
-import 'package:web3_wallet_dashboard/core/injection/service_locator.dart';
-import 'package:web3_wallet_dashboard/presentation/dashboard_screen.dart';
+import 'package:web3_wallet/core/config/dotenv_config.dart';
+import 'package:web3_wallet/core/injection/service_locator.dart';
+import 'package:web3_wallet/presentation/dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Web3 Wallet',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),

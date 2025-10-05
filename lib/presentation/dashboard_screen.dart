@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3_wallet_dashboard/core/injection/service_locator.dart';
-import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_bloc.dart';
-import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_event.dart';
-import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_state.dart';
-import 'package:web3_wallet_dashboard/presentation/widgets/wallet_overview_widget.dart';
+import 'package:web3_wallet/core/injection/service_locator.dart';
+import 'package:web3_wallet/presentation/bloc/dashboard_bloc.dart';
+import 'package:web3_wallet/presentation/bloc/dashboard_event.dart';
+import 'package:web3_wallet/presentation/bloc/dashboard_state.dart';
+import 'package:web3_wallet/presentation/widgets/dashboard_error_widget.dart';
+import 'package:web3_wallet/presentation/widgets/dashboard_loading_widget.dart';
+import 'package:web3_wallet/presentation/widgets/wallet_overview_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -69,9 +71,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         body: BlocBuilder<DashboardBloc, DashboardState>(
           builder: (context, state) {
             if (state is DashboardLoading) {
-              return _buildLoadingScreen();
+              return DashboardLoadingWidget();
             } else if (state is DashboardError) {
-              return _buildErrorScreen(state.message);
+              return DashboardErrorWidget(
+                onRefresh: () {
+                  _dashboardBloc.add(const GetEthBalanceEvent());
+                },
+              );
             } else if (state is DashboardLoaded) {
               return Container(
                 margin: const EdgeInsets.all(16.0),
@@ -92,92 +98,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }
             return const SizedBox.shrink();
           },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLoadingScreen() {
-    return Container(
-      color: Colors.grey[900],
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [Colors.blue[400]!, Colors.purple[400]!],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  strokeWidth: 3,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Loading Wallet data...',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Please wait a moment',
-              style: TextStyle(fontSize: 14, color: Colors.grey[400]),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildErrorScreen(String message) {
-    return Container(
-      color: Colors.grey[900],
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
-              const SizedBox(height: 16),
-              Text(
-                'Something went wrong',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                message,
-                style: TextStyle(fontSize: 14, color: Colors.grey[400]),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  _dashboardBloc.add(const GetEthBalanceEvent());
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[600],
-                  foregroundColor: Colors.white,
-                ),
-                child: const Text('Try again'),
-              ),
-            ],
-          ),
         ),
       ),
     );

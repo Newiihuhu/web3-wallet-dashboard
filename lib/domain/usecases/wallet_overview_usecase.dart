@@ -1,5 +1,5 @@
-import 'package:web3_wallet_dashboard/domain/entities/eth_balance_entity.dart';
-import 'package:web3_wallet_dashboard/domain/repositories/wallet_overview_repository.dart';
+import 'package:web3_wallet/domain/entities/eth_balance_entity.dart';
+import 'package:web3_wallet/domain/repositories/wallet_overview_repository.dart';
 
 class WalletOverviewUsecase {
   final WalletOverviewRepository _ethBalanceRepository;

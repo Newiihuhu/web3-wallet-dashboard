@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web3_wallet_dashboard/domain/entities/eth_balance_entity.dart';
+import 'package:web3_wallet/domain/entities/eth_balance_entity.dart';
 
 class WalletOverviewLocalDatasource {
   static const String _ethBalanceKey = 'eth_balance';
@@ -44,7 +44,7 @@ class WalletOverviewLocalDatasource {
         lastUpdated: DateTime.fromMillisecondsSinceEpoch(
           data['lastUpdated'] as int,
         ),
-        isFromRemote: data['isFromRemote'] as bool,
+        isFromRemote: false,
       );
     } catch (e) {
       return null;

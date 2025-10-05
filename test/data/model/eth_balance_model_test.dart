@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:web3_wallet_dashboard/data/models/eth_balance_model.dart';
+import 'package:web3_wallet/data/models/eth_balance_model.dart';
 
 void main() {
   group('EthBalanceModel', () {

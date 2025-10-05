@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:web3_wallet_dashboard/core/constants/wallet_constants.dart';
-import 'package:web3_wallet_dashboard/core/exception/app_exception.dart';
-import 'package:web3_wallet_dashboard/data/repositories/wallet_address_repository_impl.dart';
+import 'package:web3_wallet/core/constants/wallet_constants.dart';
+import 'package:web3_wallet/core/exception/app_exception.dart';
+import 'package:web3_wallet/data/repositories/wallet_address_repository_impl.dart';
 
 import '../datasource/local/__mock__/wallet_address_local_datasource_mock.dart';
 

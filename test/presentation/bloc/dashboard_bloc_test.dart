@@ -1,12 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:web3_wallet_dashboard/domain/entities/eth_balance_entity.dart';
-import 'package:web3_wallet_dashboard/domain/usecases/wallet_address_usecase.dart';
-import 'package:web3_wallet_dashboard/domain/usecases/wallet_overview_usecase.dart';
-import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_bloc.dart';
-import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_event.dart';
-import 'package:web3_wallet_dashboard/presentation/bloc/dashboard_state.dart';
+import 'package:web3_wallet/domain/entities/eth_balance_entity.dart';
+import 'package:web3_wallet/domain/usecases/wallet_address_usecase.dart';
+import 'package:web3_wallet/domain/usecases/wallet_overview_usecase.dart';
+import 'package:web3_wallet/presentation/bloc/dashboard_bloc.dart';
+import 'package:web3_wallet/presentation/bloc/dashboard_event.dart';
+import 'package:web3_wallet/presentation/bloc/dashboard_state.dart';
 
 import '../../domain/entities/wallet_overview_entity_mock.dart';
 

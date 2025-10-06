@@ -132,18 +132,10 @@ class TokenRates {
     'YOYO': 0.01,
     'ZEC': 50.0,
     'ZIL': 0.02,
-    '\$P': 0.1, // Example rate for $P token
+    '\$P': 0.1,
   };
 
   static double getRate(String symbol) {
     return _tokenRates[symbol.toUpperCase()] ?? 0.0;
-  }
-
-  static bool hasRate(String symbol) {
-    return _tokenRates.containsKey(symbol.toUpperCase());
-  }
-
-  static List<String> getSupportedTokens() {
-    return _tokenRates.keys.toList();
   }
 }

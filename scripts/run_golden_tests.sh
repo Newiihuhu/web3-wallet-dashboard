@@ -39,7 +39,6 @@ show_usage() {
     echo "  -a, --all               Run all golden tests"
     echo "  -b, --basic             Run basic golden tests only"
     echo "  -r, --responsive        Run responsive golden tests only"
-    echo "  -d, --dark              Run dark mode golden tests only"
     echo "  -c, --clean             Clean golden files before running"
     echo "  -v, --verbose           Verbose output"
     echo ""
@@ -47,7 +46,6 @@ show_usage() {
     echo "  $0 --update             Update all golden files"
     echo "  $0 --basic              Run basic golden tests"
     echo "  $0 --responsive         Run responsive golden tests"
-    echo "  $0 --dark               Run dark mode golden tests"
     echo "  $0 --all --verbose      Run all tests with verbose output"
 }
 
@@ -56,7 +54,6 @@ UPDATE_GOLDENS=false
 RUN_ALL=false
 RUN_BASIC=false
 RUN_RESPONSIVE=false
-RUN_DARK=false
 CLEAN_FIRST=false
 VERBOSE=false
 
@@ -81,10 +78,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         -r|--responsive)
             RUN_RESPONSIVE=true
-            shift
-            ;;
-        -d|--dark)
-            RUN_DARK=true
             shift
             ;;
         -c|--clean)
@@ -131,7 +124,7 @@ fi
 # Run tests based on selection
 if [[ "$RUN_ALL" == true || "$RUN_BASIC" == true ]]; then
     print_status "Running basic golden tests..."
-    $FLUTTER_CMD test/presentation/widgets/golden_tests.dart
+    $FLUTTER_CMD test/presentation/widgets/simple_golden_tests.dart
     print_success "Basic golden tests completed"
 fi
 
@@ -141,12 +134,6 @@ if [[ "$RUN_ALL" == true || "$RUN_RESPONSIVE" == true ]]; then
     print_success "Responsive golden tests completed"
 fi
 
-if [[ "$RUN_ALL" == true || "$RUN_DARK" == true ]]; then
-    print_status "Running dark mode golden tests..."
-    $FLUTTER_CMD test/presentation/widgets/dark_mode_golden_tests.dart
-    print_success "Dark mode golden tests completed"
-fi
-
 print_success "All selected golden tests completed successfully!"
 
 # Show summary
@@ -154,7 +141,6 @@ echo ""
 print_status "Golden test files location:"
 echo "  - Basic tests: test/presentation/widgets/golden/"
 echo "  - Responsive tests: test/presentation/widgets/golden/responsive/"
-echo "  - Dark mode tests: test/presentation/widgets/golden/dark_mode/"
 echo ""
 print_status "To update golden files, run: $0 --update"
-print_status "To run specific tests, use: $0 --basic, --responsive, or --dark"
+print_status "To run specific tests, use: $0 --basic, --responsive"

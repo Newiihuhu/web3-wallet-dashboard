@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:web3_wallet/core/constants/wallet_constants.dart';
+import 'package:web3_wallet/data/datasources/local/constants/wallet_constants.dart';
 import 'package:web3_wallet/core/exception/app_exception.dart';
 import 'package:web3_wallet/data/repositories/wallet_address_repository_impl.dart';
 

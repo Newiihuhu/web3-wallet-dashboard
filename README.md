@@ -80,6 +80,21 @@ genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html
 ```
 
+### Golden Tests (Visual Regression Tests)
+```bash
+# Run golden tests
+flutter test test/presentation/widgets/simple_golden_tests.dart             # Basic golden tests
+flutter test test/presentation/widgets/responsive_golden_tests.dart         # Responsive tests
+
+# Generate/Update golden files
+flutter test --update-goldens test/presentation/widgets/golden_tests.dart
+
+# Using the golden test script
+./scripts/run_golden_tests.sh --update      # Update all golden files
+./scripts/run_golden_tests.sh --all         # Run all golden tests
+./scripts/run_golden_tests.sh --basic       # Run basic golden tests only
+```
+
 ## 🏗️ Architectural Decisions
 
 ### Clean Architecture Implementation

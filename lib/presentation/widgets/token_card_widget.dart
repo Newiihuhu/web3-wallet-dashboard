@@ -36,20 +36,26 @@ class TokenCardWidget extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          token.symbol,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: AppTheme.primaryText,
+        Flexible(
+          child: Text(
+            token.symbol,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryText,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         const SizedBox(width: 12),
         Icon(Icons.circle, size: 8, color: AppTheme.secondaryText),
         const SizedBox(width: 12),
-        Text(
-          token.name,
-          style: TextStyle(fontSize: 12, color: AppTheme.secondaryText),
+        Expanded(
+          child: Text(
+            token.name,
+            style: TextStyle(fontSize: 12, color: AppTheme.secondaryText),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
@@ -66,6 +72,7 @@ class TokenCardWidget extends StatelessWidget {
         Text(
           token.balance.toString(),
           style: const TextStyle(fontSize: 14, color: AppTheme.primaryText),
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
@@ -82,6 +89,7 @@ class TokenCardWidget extends StatelessWidget {
         Text(
           token.usdValue.toStringAsFixed(2),
           style: const TextStyle(fontSize: 14, color: AppTheme.primaryText),
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );

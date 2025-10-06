@@ -23,7 +23,9 @@ class WalletAddressWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Text(shortenAddress(address)),
+        Flexible(
+          child: Text(shortenAddress(address), overflow: TextOverflow.ellipsis),
+        ),
         const SizedBox(width: 8),
         IconButton(
           onPressed: () {

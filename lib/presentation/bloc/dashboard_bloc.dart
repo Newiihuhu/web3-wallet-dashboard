@@ -25,16 +25,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       final balance = await _web3WalletUsecase.getETHBalance(address);
       double convertWeiToETH = balance.convertWeiToETH();
       double convertToUSD = balance.convertToUSD();
+      final tokens = _createMockTokens();
 
       final walletOverview = WalletOverviewEntity(
         totalValue: 12345.67,
         ethBalance: convertWeiToETH,
         convertToUSD: convertToUSD,
-        totalToken: 10,
+        totalToken: tokens.length,
       );
-
-      // สร้างข้อมูล tokens ตัวอย่าง
-      final tokens = _createMockTokens();
 
       emit(
         DashboardLoaded(
@@ -86,6 +84,30 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         name: 'Uniswap',
         balance: '25.0',
         usdValue: 375.0,
+      ),
+      TokenEntity(
+        symbol: 'AAVE',
+        name: 'Aave Token',
+        balance: '10.0',
+        usdValue: 1200.0,
+      ),
+      TokenEntity(
+        symbol: 'COMP',
+        name: 'Compound',
+        balance: '5.0',
+        usdValue: 300.0,
+      ),
+      TokenEntity(
+        symbol: 'MKR',
+        name: 'Maker',
+        balance: '2.0',
+        usdValue: 4000.0,
+      ),
+      TokenEntity(
+        symbol: 'SNX',
+        name: 'Synthetix',
+        balance: '100.0',
+        usdValue: 200.0,
       ),
       TokenEntity(
         symbol: 'AAVE',

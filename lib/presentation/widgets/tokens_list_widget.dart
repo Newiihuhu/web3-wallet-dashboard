@@ -20,7 +20,7 @@ class TokensListWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Tokens',
+            'Tokens (ERC-20)',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

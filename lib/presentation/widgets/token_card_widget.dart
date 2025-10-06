@@ -17,13 +17,7 @@ class TokenCardWidget extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Row(
-            children: [
-              _tokenIcon(),
-              const SizedBox(width: 12),
-              Expanded(child: _tokenInfo()),
-            ],
-          ),
+          _tokenInfo(),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -37,30 +31,9 @@ class TokenCardWidget extends StatelessWidget {
     );
   }
 
-  Widget _tokenIcon() {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: AppTheme.accentGradient,
-      ),
-      child: Center(
-        child: Text(
-          token.symbol.substring(0, 1),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: AppTheme.primaryText,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _tokenInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           token.symbol,
@@ -70,6 +43,9 @@ class TokenCardWidget extends StatelessWidget {
             color: AppTheme.primaryText,
           ),
         ),
+        const SizedBox(width: 12),
+        Icon(Icons.circle, size: 8, color: AppTheme.secondaryText),
+        const SizedBox(width: 12),
         Text(
           token.name,
           style: TextStyle(fontSize: 12, color: AppTheme.secondaryText),

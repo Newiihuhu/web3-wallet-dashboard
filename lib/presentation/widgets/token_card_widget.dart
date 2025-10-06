@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:web3_wallet/core/theme/app_theme.dart';
-import 'package:web3_wallet/domain/entities/token_entity.dart';
+import 'package:web3_wallet/domain/entities/tokens_overview_entity.dart';
+import 'package:web3_wallet/presentation/dashboard_constant.dart';
 
 class TokenCardWidget extends StatelessWidget {
-  final TokenEntity token;
+  final TokensOverviewEntity token;
 
   const TokenCardWidget({super.key, required this.token});
 
@@ -59,11 +60,11 @@ class TokenCardWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Balance',
+          DashboardConstant.balance,
           style: TextStyle(fontSize: 12, color: AppTheme.secondaryText),
         ),
         Text(
-          token.balance,
+          token.balance.toString(),
           style: const TextStyle(fontSize: 14, color: AppTheme.primaryText),
         ),
       ],
@@ -75,11 +76,11 @@ class TokenCardWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          'USD Value',
+          DashboardConstant.usdValue,
           style: TextStyle(fontSize: 12, color: AppTheme.secondaryText),
         ),
         Text(
-          '\$${token.usdValue.toStringAsFixed(2)}',
+          token.usdValue.toStringAsFixed(2),
           style: const TextStyle(fontSize: 14, color: AppTheme.primaryText),
         ),
       ],

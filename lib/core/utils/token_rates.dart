@@ -1,0 +1,149 @@
+class TokenRates {
+  static const Map<String, double> _tokenRates = {
+    // ETH and related tokens
+    'ETH': 4544.75,
+    'R2ETH': 4544.75,
+    'WETH': 4544.75,
+
+    // USD stablecoins
+    'USDC': 1.0,
+    'USDT': 1.0,
+    'DAI': 1.0,
+    'R2USD': 1.0,
+    'sR2USD': 1.0,
+
+    // Major cryptocurrencies
+    'WBTC': 95000.0,
+    'UNI': 12.5,
+    'LINK': 15.2,
+    'AAVE': 120.0,
+    'COMP': 85.0,
+    'MKR': 2500.0,
+    'SNX': 3.5,
+    'YFI': 8500.0,
+    'CRV': 0.8,
+    '1INCH': 0.5,
+    'SUSHI': 1.2,
+    'BAL': 4.5,
+    'LDO': 2.8,
+
+    // Meme coins
+    'SHIB': 0.00001,
+    'PEPE': 0.000001,
+    'DOGE': 0.08,
+
+    // Layer 1 blockchains
+    'MATIC': 0.85,
+    'AVAX': 35.0,
+    'SOL': 100.0,
+    'ADA': 0.45,
+    'DOT': 6.5,
+    'LTC': 95.0,
+    'BCH': 250.0,
+    'XRP': 0.6,
+    'ALGO': 0.15,
+    'ATOM': 8.5,
+    'NEAR': 3.2,
+    'FTM': 0.4,
+
+    // Gaming tokens
+    'MANA': 0.5,
+    'SAND': 0.6,
+    'AXS': 7.5,
+    'CHZ': 0.1,
+    'ENJ': 0.3,
+
+    // DeFi tokens
+    'BAT': 0.25,
+    'ZRX': 0.3,
+    'KNC': 0.8,
+    'REN': 0.1,
+    'LRC': 0.2,
+    'STORJ': 0.4,
+    'OMG': 0.8,
+    'GNT': 0.1,
+    'ANT': 2.5,
+    'BNT': 1.5,
+    'MCO': 5.0,
+    'FUN': 0.01,
+    'REQ': 0.05,
+    'VIB': 0.02,
+    'TRX': 0.08,
+    'POWR': 0.15,
+    'ADX': 0.3,
+    'AE': 0.1,
+    'AST': 0.05,
+    'PPT': 0.8,
+    'CTR': 0.1,
+    'FUEL': 0.01,
+    'DATA': 0.02,
+    'MTL': 0.8,
+    'VIBE': 0.01,
+    'DNT': 0.02,
+    'QSP': 0.01,
+    'MITH': 0.01,
+    'BQX': 0.1,
+    'EDG': 0.01,
+    'RLC': 0.8,
+    'WAX': 0.1,
+    'DGX': 50.0,
+    'AMB': 0.02,
+    'ARN': 0.1,
+    'BCPT': 0.01,
+    'BNTY': 0.01,
+    'CDT': 0.01,
+    'CMT': 0.01,
+    'CVC': 0.1,
+    'DGD': 50.0,
+    'DLT': 0.01,
+    'DRGN': 0.01,
+    'ENG': 0.1,
+    'EVX': 0.1,
+    'GTO': 0.01,
+    'GVT': 0.1,
+    'HOT': 0.001,
+    'HST': 0.1,
+    'ICN': 0.1,
+    'INS': 0.1,
+    'IOST': 0.01,
+    'KIN': 0.0001,
+    'LEND': 0.1,
+    'LOOM': 0.01,
+    'LUN': 0.1,
+    'MDA': 0.1,
+    'NEBL': 0.1,
+    'NULS': 0.1,
+    'OAX': 0.1,
+    'OST': 0.01,
+    'PAY': 0.1,
+    'RCN': 0.01,
+    'RDN': 0.1,
+    'SALT': 0.1,
+    'SAN': 0.1,
+    'SNT': 0.01,
+    'SUB': 0.1,
+    'TNB': 0.01,
+    'TNT': 0.01,
+    'VEN': 0.1,
+    'WINGS': 0.01,
+    'WTC': 0.1,
+    'XLM': 0.1,
+    'XVG': 0.01,
+    'YOYO': 0.01,
+    'ZEC': 50.0,
+    'ZIL': 0.02,
+    '\$P': 0.1, // Example rate for $P token
+  };
+
+  static double getRate(String symbol) {
+    return _tokenRates[symbol.toUpperCase()] ?? 0.0;
+  }
+
+  static bool hasRate(String symbol) {
+    return _tokenRates.containsKey(symbol.toUpperCase());
+  }
+
+  static List<String> getSupportedTokens() {
+    return _tokenRates.keys.toList();
+  }
+}

@@ -12,14 +12,10 @@ class AddressNotFoundException extends AppException {
   const AddressNotFoundException(super.message, {super.code});
 }
 
-class AuthenticationException extends AppException {
-  const AuthenticationException(super.message, {super.code});
+class LocalStorageException extends AppException {
+  const LocalStorageException(super.message, {super.code});
 }
 
-class JsonRpcException extends AppException {
-  const JsonRpcException(super.message, {super.code});
-}
-
-class NetworkException extends AppException {
-  const NetworkException(super.message, {super.code});
+class RemoteException extends AppException {
+  const RemoteException(super.message, {super.code});
 }

@@ -2,6 +2,6 @@ class DashboardEvent {
   const DashboardEvent();
 }
 
-class GetEthBalanceEvent extends DashboardEvent {
-  const GetEthBalanceEvent();
+class GetWalletDataEvent extends DashboardEvent {
+  const GetWalletDataEvent();
 }

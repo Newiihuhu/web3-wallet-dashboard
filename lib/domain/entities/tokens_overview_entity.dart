@@ -1,10 +1,10 @@
-class TokenEntity {
+class TokensOverviewEntity {
   final String symbol;
   final String name;
-  final String balance;
+  final double balance;
   final double usdValue;
 
-  TokenEntity({
+  TokensOverviewEntity({
     required this.symbol,
     required this.name,
     required this.balance,

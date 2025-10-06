@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3_wallet/core/exception/app_exception.dart';
 import 'package:web3_wallet/domain/entities/eth_balance_entity.dart';
 
 class WalletOverviewLocalDatasource {
@@ -11,13 +12,7 @@ class WalletOverviewLocalDatasource {
 
   Future<bool> saveETHBalance(EthBalanceEntity model) async {
     try {
-      final now = DateTime.now().millisecondsSinceEpoch;
-
-      final balanceData = {
-        'balance': model.balance,
-        'lastUpdated': now,
-        'isFromRemote': model.isFromRemote,
-      };
+      final balanceData = {'balance': model.balance};
 
       final success = await _prefs.setString(
         _ethBalanceKey,
@@ -26,7 +21,9 @@ class WalletOverviewLocalDatasource {
 
       return success;
     } catch (e) {
-      return false;
+      throw LocalStorageException(
+        'Error saving ETH balance to local storage: $e',
+      );
     }
   }
 
@@ -39,32 +36,12 @@ class WalletOverviewLocalDatasource {
       }
 
       final data = jsonDecode(balanceData) as Map<String, dynamic>;
-      return EthBalanceEntity(
-        balance: data['balance'] as String,
-        lastUpdated: DateTime.fromMillisecondsSinceEpoch(
-          data['lastUpdated'] as int,
-        ),
-        isFromRemote: false,
-      );
+      return EthBalanceEntity(balance: data['balance'] as String);
     } catch (e) {
-      return null;
+      throw LocalStorageException(
+        'Error getting ETH balance from local storage: $e',
+      );
     }
-  }
-
-  bool isBalanceDataFresh() {
-    final balanceData = _prefs.getString(_ethBalanceKey);
-    if (balanceData == null) {
-      return false;
-    }
-
-    final data = jsonDecode(balanceData) as Map<String, dynamic>;
-    final lastUpdated = data['lastUpdated'] as int;
-
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final cacheAge = now - lastUpdated;
-    const fiveMinutesInMs = 5 * 60 * 1000;
-
-    return cacheAge < fiveMinutesInMs;
   }
 
   bool hasBalanceData() {

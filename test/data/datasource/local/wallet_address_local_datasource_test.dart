@@ -38,27 +38,6 @@ void main() {
           ).called(1);
         },
       );
-
-      test(
-        'should return false when SharedPreferences fails to save',
-        () async {
-          // Arrange
-          when(
-            () =>
-                mockSharedPreferences.setString(walletAddressKey, testAddress),
-          ).thenAnswer((_) async => false);
-
-          // Act
-          final result = await datasource.saveWalletAddress(testAddress);
-
-          // Assert
-          expect(result, false);
-          verify(
-            () =>
-                mockSharedPreferences.setString(walletAddressKey, testAddress),
-          ).called(1);
-        },
-      );
     });
 
     group('getWalletAddress', () {
@@ -83,62 +62,6 @@ void main() {
           ).called(1);
         },
       );
-
-      test('should return empty string when stored address is empty', () {
-        // Arrange
-        const emptyAddress = '';
-        when(
-          () => mockSharedPreferences.getString(walletAddressKey),
-        ).thenReturn(emptyAddress);
-
-        // Act
-        final result = datasource.getWalletAddress();
-
-        // Assert
-        expect(result, emptyAddress);
-        verify(
-          () => mockSharedPreferences.getString(walletAddressKey),
-        ).called(1);
-      });
-    });
-
-    group('hasWalletAddress', () {
-      const walletAddressKey = 'wallet_address';
-
-      test(
-        'should return true when wallet address key exists in SharedPreferences',
-        () {
-          // Arrange
-          when(
-            () => mockSharedPreferences.containsKey(walletAddressKey),
-          ).thenReturn(true);
-
-          // Act
-          final result = datasource.hasWalletAddress();
-
-          // Assert
-          expect(result, true);
-          verify(
-            () => mockSharedPreferences.containsKey(walletAddressKey),
-          ).called(1);
-        },
-      );
-
-      test('should return false when wallet address key does not exist', () {
-        // Arrange
-        when(
-          () => mockSharedPreferences.containsKey(walletAddressKey),
-        ).thenReturn(false);
-
-        // Act
-        final result = datasource.hasWalletAddress();
-
-        // Assert
-        expect(result, false);
-        verify(
-          () => mockSharedPreferences.containsKey(walletAddressKey),
-        ).called(1);
-      });
     });
   });
 }

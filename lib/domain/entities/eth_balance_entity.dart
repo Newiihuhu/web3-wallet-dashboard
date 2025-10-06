@@ -1,14 +1,11 @@
 import 'package:web3_wallet/core/utils/formatter.dart';
+import 'package:web3_wallet/core/utils/token_rates.dart';
 
 class EthBalanceEntity {
   final String balance;
-  final DateTime? lastUpdated;
-  final bool isFromRemote;
 
   EthBalanceEntity({
     required this.balance,
-    this.lastUpdated,
-    this.isFromRemote = false,
   });
 
   double convertWeiToETH() {
@@ -16,8 +13,7 @@ class EthBalanceEntity {
   }
 
   double convertToUSD() {
-    // rate is 4544.75
     double ethAmount = convertWeiToETH();
-    return ethAmount * 4544.75;
+    return ethAmount * TokenRates.getRate('ETH');
   }
 }

@@ -8,11 +8,9 @@ class WalletOverviewWidget extends StatelessWidget {
     super.key,
     required this.walletOverview,
     required this.onRefresh,
-    this.isFromCache = false,
   });
   final WalletOverviewEntity walletOverview;
   final Function() onRefresh;
-  final bool isFromCache;
 
   @override
   Widget build(BuildContext context) {
@@ -48,33 +46,11 @@ class WalletOverviewWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
+                  // ignore: deprecated_member_use
                   color: AppTheme.surfaceBackground.withOpacity(0.3),
                 ),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          DashboardConstant.totalValue,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppTheme.primaryText,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          DashboardConstant.getUSDValue(
-                            walletOverview.totalValue,
-                          ),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.primaryText,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -93,19 +69,31 @@ class WalletOverviewWidget extends StatelessWidget {
                             color: AppTheme.primaryText,
                           ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Text(
+                          DashboardConstant.usdValue,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.primaryText,
+                          ),
+                        ),
                         const SizedBox(width: 8),
                         Text(
-                          DashboardConstant.getUSDValue(
-                            walletOverview.convertToUSD,
-                          ),
+                          walletOverview.totalValue.toStringAsFixed(2),
+
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.successGreen,
+                            color: AppTheme.primaryText,
                           ),
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 6),
                     Row(
                       children: [
@@ -140,42 +128,6 @@ class WalletOverviewWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        // Cache status indicator
-        if (isFromCache) ...[
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppTheme.warningOrange,
-            ),
-          ),
-          // Icon(Icons.cached, color: Colors.orange[400], size: 12),
-          const SizedBox(width: 4),
-          Text(
-            'Cached',
-            style: TextStyle(fontSize: 10, color: AppTheme.warningOrange),
-          ),
-          const SizedBox(width: 8),
-        ] else ...[
-          Icon(Icons.cloud_done, color: AppTheme.successGreen, size: 12),
-          const SizedBox(width: 4),
-          Text(
-            'Live',
-            style: TextStyle(fontSize: 10, color: AppTheme.successGreen),
-          ),
-          const SizedBox(width: 8),
-        ],
-        // Text(
-        //   DashboardConstant.lastSync,
-        //   style: TextStyle(fontSize: 10, color: Colors.grey[400]),
-        // ),
-        // const SizedBox(width: 8),
-        // Text(
-        //   '10:00:00',
-        //   style: TextStyle(fontSize: 10, color: Colors.grey[400]),
-        // ),
-        // const SizedBox(width: 8),
         InkWell(
           onTap: onRefresh,
           child: Row(

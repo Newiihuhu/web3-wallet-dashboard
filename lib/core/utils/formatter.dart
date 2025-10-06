@@ -6,3 +6,8 @@ double bigIntToAmount(BigInt raw, int decimals) =>
 
 double hexToAmount(String hex, int decimals) =>
     bigIntToAmount(hexToBigInt(hex), decimals);
+
+String shortenAddress(String address, {int prefix = 6, int suffix = 4}) {
+  if (address.length <= prefix + suffix) return address;
+  return '${address.substring(0, prefix)}...${address.substring(address.length - suffix)}';
+}

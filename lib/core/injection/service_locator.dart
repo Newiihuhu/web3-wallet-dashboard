@@ -2,15 +2,16 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3_wallet/core/config/app_config.dart';
+import 'package:web3_wallet/data/datasources/local/tokens_local_datasource.dart';
 import 'package:web3_wallet/data/datasources/local/wallet_address_local_datasource.dart';
 import 'package:web3_wallet/data/datasources/local/wallet_overview_local_datasource.dart';
 import 'package:web3_wallet/data/datasources/remote/wallet_remote_datasource.dart';
 import 'package:web3_wallet/data/repositories/wallet_address_repository_impl.dart';
-import 'package:web3_wallet/data/repositories/wallet_overview_repository_impl.dart';
+import 'package:web3_wallet/data/repositories/wallet_repository_impl.dart';
 import 'package:web3_wallet/domain/repositories/wallet_address_repository.dart';
-import 'package:web3_wallet/domain/repositories/wallet_overview_repository.dart';
+import 'package:web3_wallet/domain/repositories/wallet_repository.dart';
 import 'package:web3_wallet/domain/usecases/wallet_address_usecase.dart';
-import 'package:web3_wallet/domain/usecases/wallet_overview_usecase.dart';
+import 'package:web3_wallet/domain/usecases/wallet_usecase.dart';
 import 'package:web3_wallet/presentation/bloc/dashboard_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -62,13 +63,17 @@ Future<void> _registerDataSources() async {
   getIt.registerLazySingleton<WalletOverviewLocalDatasource>(
     () => WalletOverviewLocalDatasource(sharedPreferences),
   );
+  getIt.registerLazySingleton<TokensLocalDatasource>(
+    () => TokensLocalDatasource(sharedPreferences),
+  );
 }
 
 void _registerRepositories() {
-  getIt.registerLazySingleton<WalletOverviewRepository>(
-    () => WalletOverviewRepositoryImpl(
+  getIt.registerLazySingleton<WalletRepository>(
+    () => WalletRepositoryImpl(
       getIt<WalletRemoteDatasource>(),
       getIt<WalletOverviewLocalDatasource>(),
+      getIt<TokensLocalDatasource>(),
     ),
   );
   getIt.registerLazySingleton<WalletAddressRepository>(
@@ -77,8 +82,8 @@ void _registerRepositories() {
 }
 
 void _registerUseCases() {
-  getIt.registerLazySingleton<WalletOverviewUsecase>(
-    () => WalletOverviewUsecase(getIt<WalletOverviewRepository>()),
+  getIt.registerLazySingleton<WalletUsecase>(
+    () => WalletUsecase(getIt<WalletRepository>()),
   );
   getIt.registerLazySingleton<WalletAddressUsecase>(
     () => WalletAddressUsecase(getIt<WalletAddressRepository>()),
@@ -87,10 +92,7 @@ void _registerUseCases() {
 
 void _registerBlocs() {
   getIt.registerFactory<DashboardBloc>(
-    () => DashboardBloc(
-      getIt<WalletOverviewUsecase>(),
-      getIt<WalletAddressUsecase>(),
-    ),
+    () => DashboardBloc(getIt<WalletUsecase>(), getIt<WalletAddressUsecase>()),
   );
 }
 

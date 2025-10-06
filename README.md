@@ -1,16 +1,170 @@
-# web3_wallet_dashboard
+# Web3 Wallet Dashboard
 
-A new Flutter project.
+Flutter application that displays wallet information including ETH balance and ERC-20 token balances
 
-## Getting Started
+## 🚀 How to Run the App
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+- Flutter SDK (3.0.0 or higher)
+- Dart SDK (3.0.0 or higher)
+- Android Studio / VS Code with Flutter extensions
+- Android device or emulator / iOS simulator
 
-A few resources to get you started if this is your first Flutter project:
+### Installation Steps
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. **Clone the repository**
+   ```bash
+   git clone git@github.com:Newiihuhu/web3-wallet-dashboard.git
+   cd web3_wallet_dashboard
+   ```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env file with your API keys (see API Keys Setup section)
+   ```
+
+4. **Run the app**
+   ```bash
+   # For development
+   flutter run
+   ```
+
+## 🔑 API Keys Setup
+
+### Required API Keys
+
+1. **Alchemy API Key**
+   - Sign up at [Alchemy](https://www.alchemy.com/)
+   - Create a new app and get your API key
+   - Add to `.env` file:
+     ```
+     ALCHEMY_API_KEY=your_alchemy_api_key_here
+     ```
+
+2. **Environment File Setup**
+   ```bash
+   # Create .env file in project root
+   touch .env
+   
+   # Add your API key
+   echo "ALCHEMY_API_KEY=your_actual_api_key" >> .env
+   ```
+
+## 🧪 How to Run Tests
+
+### Run All Tests
+```bash
+flutter test
+```
+
+### Run Specific Test Categories
+```bash
+# Unit tests only
+flutter test test/domain/
+flutter test test/data/
+
+# Widget tests only
+flutter test test/presentation/widgets/
+
+# Integration tests
+flutter test integration_test/
+```
+
+### Run Tests with Coverage
+```bash
+flutter test --coverage
+genhtml coverage/lcov.info -o coverage/html
+open coverage/html/index.html
+```
+
+## 🏗️ Architectural Decisions
+
+### Clean Architecture Implementation
+
+The app follows Clean Architecture principles with clear separation of concerns:
+
+```
+lib/
+├── core/                   # Core utilities and configurations
+│   ├── config/             # App configuration
+│   ├── constants/          # App constants
+│   ├── exception/          # Custom exceptions
+│   ├── injection/          # Dependency injection
+│   ├── theme/              # App theming
+│   └── utils/              # Utility functions
+├── data/                   # Data layer
+│   ├── datasources/        # Data sources (remote & local)
+│   ├── models/             # Data models
+│   └── repositories/       # Repository implementations
+├── domain/                 # Domain layer
+│   ├── entities/           # Business entities
+│   ├── repositories/       # Repository interfaces
+│   └── usecases/           # Use cases
+└── presentation/           # Presentation layer
+    ├── bloc/               # State management
+    ├── widgets/            # UI components
+    └── dashboard_screen.dart
+```
+
+### Key Architectural Decisions
+
+#### 1. **State Management: BLoC Pattern**
+- **Why**: Predictable state management with clear separation of business logic
+- **Benefits**: Testable, maintainable, and follows Flutter best practices
+- **Implementation**: `DashboardBloc` manages wallet data state
+
+#### 2. **Dependency Injection: GetIt**
+- **Why**: Simple and efficient service locator pattern
+- **Benefits**: Easy testing with mock dependencies
+- **Implementation**: `service_locator.dart` manages all dependencies
+
+#### 3. **Data Layer: Repository Pattern**
+- **Why**: Abstracts data sources and provides clean interface
+- **Benefits**: Easy to switch between remote and local data sources
+- **Implementation**: 
+  - `WalletRepository` interface
+  - `WalletRepositoryImpl` with remote and local data sources
+
+#### 4. **Local Caching: SharedPreferences**
+- **Why**: Simple key-value storage for caching wallet data
+- **Benefits**: Improves app performance and offline capability
+- **Implementation**: Separate local data sources for different data types
+
+
+#### 5. **API Integration: Alchemy**
+- **Why**: Offers developer-friendly APIs on the Sepolia testnet, which directly match the assignment requirements.
+- **Benefits**: Provides higher-level JSON-RPC methods like alchemy_getTokenBalances and alchemy_getTokenMetadata, which simplify fetching ETH and ERC-20 balances.
+- **Implementation**: `WalletRemoteDatasource` handles all API calls
+
+### API Endpoints Used
+- **ETH Balance**: `eth_getBalance`
+- **Token Balances**: `alchemy_getTokenBalances`
+- **Token Metadata**: `alchemy_getTokenMetadata`
+
+
+### Testing Strategy
+
+#### 1. **Unit Tests**
+- **Coverage**: Domain entities, use cases, and utilities
+- **Focus**: Business logic and data transformations
+- **Tools**: `flutter_test`, `mocktail`, `bloc_test`
+
+#### 2. **Widget Tests**
+- **Coverage**: UI components and user interactions
+- **Focus**: Widget rendering and user interactions
+- **Tools**: `flutter_test`, `WidgetTester`
+
+## 📱 Features
+
+- **Wallet Address Display**: Shows wallet address with copy functionality
+- **ETH Balance**: Displays ETH balance in both ETH and USD
+- **Token Balances**: Lists all ERC-20 tokens with balances and USD values
+- **Real-time Data**: Fetches latest data from Alchemy API
+- **Offline Support**: Caches data locally for offline viewing
+- **Error Handling**: Graceful error handling with retry functionality

@@ -83,11 +83,9 @@ open coverage/html/index.html
 ### Golden Tests (Visual Regression Tests)
 ```bash
 # Run golden tests
-flutter test test/presentation/widgets/simple_golden_tests.dart             # Basic golden tests
 flutter test test/presentation/widgets/responsive_golden_tests.dart         # Responsive tests
 
 # Generate/Update golden files
-flutter test test/presentation/widgets/simple_golden_tests.dart --update-goldens
 flutter test test/presentation/widgets/responsive_golden_tests.dart --update-goldens
 ```
 

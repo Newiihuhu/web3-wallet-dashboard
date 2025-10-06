@@ -83,6 +83,118 @@ genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html
 ```
 
+## 🔄 Data Flow
+
+### Application Data Flow
+
+```mermaid
+graph TD
+    A[User Opens App] --> B[DashboardScreen]
+    B --> C[DashboardBloc]
+    C --> D[WalletUsecase]
+    D --> E[WalletRepository]
+    E --> F{Check Local Cache}
+    F -->|Cache Available| G[Local DataSource]
+    F -->|No Cache| H[Remote DataSource]
+    H --> I[Alchemy API]
+    I --> J[ETH Balance + Token Data]
+    J --> K[Save to Local Cache]
+    K --> L[Convert to Entities]
+    G --> L
+    L --> M[Calculate USD Values]
+    M --> N[Update UI State]
+    N --> O[Display Wallet Info]
+```
+
+### Detailed Data Flow Steps
+
+1. **User Interaction**
+   - User opens the app
+   - `DashboardScreen` initializes
+
+2. **State Management**
+   - `DashboardBloc` triggers `GetWalletDataEvent`
+   - BLoC calls `WalletUsecase`
+
+3. **Business Logic**
+   - `WalletUsecase` calls `WalletRepository`
+   - Repository checks local cache first
+
+4. **Data Layer**
+   - **Cache Hit**: Return cached data
+   - **Cache Miss**: Fetch from remote API
+
+5. **API Integration**
+   - `WalletRemoteDatasource` calls Alchemy API
+   - Fetches ETH balance and ERC-20 tokens
+
+6. **Data Processing**
+   - Convert API responses to models
+   - Transform models to entities
+   - Calculate USD values using token rates
+
+7. **Caching**
+   - Save processed data to local storage
+   - Update cache timestamps
+
+8. **UI Update**
+   - BLoC emits new state
+   - UI rebuilds with new data
+
+### Data Flow Components
+
+| Component | Responsibility |
+|-----------|----------------|
+| **DashboardScreen** | UI presentation and user interaction |
+| **DashboardBloc** | State management and business logic coordination |
+| **WalletUsecase** | Business logic and use case orchestration |
+| **WalletRepository** | Data access abstraction and caching strategy |
+| **RemoteDataSource** | API communication with Alchemy |
+| **LocalDataSource** | Local storage and caching |
+| **Models** | Data transfer objects from API |
+| **Entities** | Business domain objects |
+
+### API Data Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant UI as DashboardScreen
+    participant B as DashboardBloc
+    participant UC as WalletUsecase
+    participant R as WalletRepository
+    participant L as LocalDataSource
+    participant A as Alchemy API
+
+    U->>UI: Opens App
+    UI->>B: GetWalletDataEvent
+    B->>UC: getETHBalance()
+    UC->>R: getETHBalance()
+    R->>L: Check Cache
+    
+    alt Cache Available
+        L-->>R: Cached Data
+        R-->>UC: EthBalanceEntity
+    else No Cache
+        R->>A: eth_getBalance
+        A-->>R: ETH Balance (hex)
+        R->>L: Save to Cache
+        R-->>UC: EthBalanceEntity
+    end
+    
+    UC->>R: getErc20Tokens()
+    R->>A: alchemy_getTokenBalances
+    A-->>R: Token Balances
+    R->>A: alchemy_getTokenMetadata (per token)
+    A-->>R: Token Metadata
+    R->>L: Save to Cache
+    R-->>UC: List<TokensEntity>
+    
+    UC-->>B: Processed Data
+    B-->>UI: DashboardLoaded State
+    UI-->>U: Display Wallet Info
+```
+
 ## 🏗️ Architectural Decisions
 
 ### Clean Architecture Implementation

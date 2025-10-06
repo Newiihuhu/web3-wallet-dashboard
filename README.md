@@ -71,9 +71,6 @@ flutter test test/data/
 
 # Widget tests only
 flutter test test/presentation/widgets/
-
-# Integration tests
-flutter test integration_test/
 ```
 
 ### Run Tests with Coverage

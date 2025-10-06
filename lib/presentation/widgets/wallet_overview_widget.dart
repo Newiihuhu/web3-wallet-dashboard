@@ -55,7 +55,7 @@ class WalletOverviewWidget extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      formatNumberWithCommas(walletOverview.ethBalance),
+                      walletOverview.ethBalance.toString(),
                       style: TextStyle(
                         fontSize: 14,
                         color: AppTheme.primaryText,
@@ -98,9 +98,7 @@ class WalletOverviewWidget extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      formatNumberWithCommas(
-                        walletOverview.totalToken.toDouble(),
-                      ),
+                      walletOverview.totalToken.toString(),
                       style: TextStyle(
                         fontSize: 14,
                         color: AppTheme.primaryText,

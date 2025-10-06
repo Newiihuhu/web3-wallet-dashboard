@@ -32,7 +32,7 @@ void main() {
       expect(find.text(DashboardConstant.usdValue), findsOneWidget);
       expect(find.text(DashboardConstant.totalTokens), findsOneWidget);
       expect(find.text('2.5'), findsOneWidget);
-      expect(find.text('12361.88'), findsOneWidget);
+      expect(find.text('12,361.88'), findsOneWidget);
       expect(find.text('3'), findsOneWidget);
     });
   });

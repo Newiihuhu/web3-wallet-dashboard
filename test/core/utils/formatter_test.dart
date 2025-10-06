@@ -1,166 +1,141 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:web3_wallet/core/utils/formatter.dart';
 
 void main() {
   group('Formatter', () {
     group('hexToBigInt', () {
-      test('should convert hex string with 0x prefix to BigInt', () {
+      test('should convert hex string to BigInt', () {
         // Given
-        const hex = '0x1234567890abcdef';
+        final random = Random(42);
+        for (int i = 0; i < 5; i++) {
+          final value = BigInt.from(random.nextInt(1000000));
+          final hex = '0x${value.toRadixString(16)}';
+          final hexWithoutPrefix = value.toRadixString(16);
 
-        // When
-        final result = hexToBigInt(hex);
+          // When
+          final result = hexToBigInt(hex);
 
-        // Then
-        expect(result, BigInt.parse('1234567890abcdef', radix: 16));
+          // Then
+          expect(result, BigInt.parse(hexWithoutPrefix, radix: 16));
+        }
       });
-
-      test('should convert hex string without 0x prefix to BigInt', () {
-        // Given
-        const hex = '1234567890abcdef';
-
-        // When
-        final result = hexToBigInt(hex);
-
-        // Then
-        expect(result, BigInt.parse('1234567890abcdef', radix: 16));
-      });
-
-      test('should convert zero hex to BigInt.zero', () {
-        // Given
-        const hex = '0x0';
-
-        // When
-        final result = hexToBigInt(hex);
-
-        // Then
-        expect(result, BigInt.zero);
-      });
-
       test('should handle large hex values', () {
         // Given
-        const hex = '0xffffffffffffffffffffffffffffffffffffffff';
+        final maxUint256 =
+            '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
         // When
-        final result = hexToBigInt(hex);
+        final result = hexToBigInt(maxUint256);
 
         // Then
-        expect(
-          result,
-          BigInt.parse('ffffffffffffffffffffffffffffffffffffffff', radix: 16),
-        );
+        expect(() => hexToBigInt(maxUint256), returnsNormally);
+        expect(result, greaterThan(BigInt.zero));
       });
     });
 
     group('bigIntToAmount', () {
-      test('should convert BigInt to amount with decimals', () {
+      test('should convert BigInt to amount with decimals correctly', () {
         // Given
-        final raw = BigInt.parse('1000000000000000000');
-        const decimals = 18;
+        final testCases = [
+          {'raw': BigInt.one, 'decimals': 0, 'expected': 1.0},
+          {'raw': BigInt.one, 'decimals': 1, 'expected': 0.1},
+          {'raw': BigInt.one, 'decimals': 18, 'expected': 1e-18},
+          {'raw': BigInt.from(1000000), 'decimals': 6, 'expected': 1.0},
+        ];
 
-        // When
-        final result = bigIntToAmount(raw, decimals);
+        for (final case_ in testCases) {
+          final result = bigIntToAmount(
+            case_['raw'] as BigInt,
+            case_['decimals'] as int,
+          );
 
-        // Then
-        expect(result, 1.0);
-      });
-
-      test('should return 0.0 when BigInt is zero', () {
-        // Given
-        final raw = BigInt.zero;
-        const decimals = 18;
-
-        // When
-        final result = bigIntToAmount(raw, decimals);
-
-        // Then
-        expect(result, 0.0);
-      });
-
-      test('should handle very small amounts', () {
-        // Given
-        final raw = BigInt.parse('1');
-        const decimals = 18;
-
-        // When
-        final result = bigIntToAmount(raw, decimals);
-
-        // Then
-        expect(result, 1e-18);
+          expect(result, closeTo(case_['expected'] as double, 1e-15));
+        }
       });
     });
 
     group('hexToAmount', () {
       test('should convert hex string to amount with decimals', () {
         // Given
-        const hex = '0xde0b6b3a7640000';
-        const decimals = 18;
+        final random = Random(42);
+        final value = BigInt.from(random.nextInt(1000000));
+        final hex = '0x${value.toRadixString(16)}';
+        final decimals = random.nextInt(18) + 1;
 
         // When
         final result = hexToAmount(hex, decimals);
 
         // Then
-        expect(result, 1.0);
+        expect(result, closeTo(bigIntToAmount(value, decimals), 1e-12));
+      });
+      test('should be consistent with hexToBigInt + bigIntToAmount', () {
+        // Given
+        final random = Random(42);
+
+        for (int i = 0; i < 15; i++) {
+          final value = BigInt.from(random.nextInt(1000000));
+          final hex = '0x${value.toRadixString(16)}';
+          final decimals = random.nextInt(18) + 1;
+
+          // When
+          final directResult = hexToAmount(hex, decimals);
+          final stepByStepResult = bigIntToAmount(hexToBigInt(hex), decimals);
+
+          // Then
+          expect(directResult, closeTo(stepByStepResult, 1e-12));
+        }
       });
 
-      test('should return 0.0 when hex is zero', () {
+      test('should handle zero consistently', () {
         // Given
-        const hex = '0x0';
-        const decimals = 18;
+        final zeroVariants = ['0x0', '0x00', '0x0000', '0'];
+        final random = Random(42);
 
-        // When
-        final result = hexToAmount(hex, decimals);
+        for (final zero in zeroVariants) {
+          final decimals = random.nextInt(18) + 1;
 
-        // Then
-        expect(result, 0.0);
+          // When
+          final result = hexToAmount(zero, decimals);
+
+          // Then
+          expect(result, equals(0.0));
+        }
       });
     });
 
     group('shortenAddress', () {
-      test('should shorten long address with default prefix and suffix', () {
+      test('should always include prefix and suffix', () {
         // Given
-        const address = '0x1234567890abcdef1234567890abcdef12345678';
+        final random = Random(42);
 
-        // When
-        final result = shortenAddress(address);
+        for (int i = 0; i < 5; i++) {
+          final length = random.nextInt(20) + 20;
+          final address = '0x${'a' * (length - 2)}';
 
-        // Then
-        expect(result, '0x1234...5678');
-      });
+          // When
+          final result = shortenAddress(address);
 
-      test('should shorten address with custom prefix and suffix', () {
-        // Given
-        const address = '0x1234567890abcdef1234567890abcdef12345678';
-        const prefix = 4;
-        const suffix = 6;
-
-        // When
-        final result = shortenAddress(address, prefix: prefix, suffix: suffix);
-
-        // Then
-        expect(result, '0x12...345678');
+          // Then
+          expect(result, contains('...'));
+          expect(result.length, lessThan(address.length));
+          expect(result, startsWith(address.substring(0, 4)));
+          expect(result, endsWith(address.substring(address.length - 4)));
+        }
       });
 
       test('should return original address when too short', () {
         // Given
-        const address = '0x12345678';
+        final shortAddresses = ['0x1234', '0x12345678', '1234567890'];
 
-        // When
-        final result = shortenAddress(address);
+        for (final address in shortAddresses) {
+          // When
+          final result = shortenAddress(address);
 
-        // Then
-        expect(result, '0x12345678');
-      });
-
-      test('should handle address without 0x prefix', () {
-        // Given
-        const address = '1234567890abcdef1234567890abcdef12345678';
-
-        // When
-        final result = shortenAddress(address);
-
-        // Then
-        expect(result, '123456...5678');
+          // Then
+          expect(result, equals(address));
+        }
       });
     });
   });

@@ -18,17 +18,28 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<EthBalanceEntity> getETHBalance(String address) async {
-    if (_localDatasource.hasBalanceData()) {
-      final localBalance = _localDatasource.getETHBalance();
-      if (localBalance != null && localBalance.balance.isNotEmpty) {
-        return localBalance;
-      }
+    final cachedBalance = _getCachedETHBalance();
+    if (cachedBalance != null) {
+      return cachedBalance;
     }
 
     final remoteBalance = await _remoteDatasource.getETHBalance(address);
     await _localDatasource.saveETHBalance(remoteBalance);
 
     return remoteBalance;
+  }
+
+  EthBalanceEntity? _getCachedETHBalance() {
+    if (!_localDatasource.hasBalanceData()) {
+      return null;
+    }
+
+    final localBalance = _localDatasource.getETHBalance();
+    if (localBalance?.balance.isNotEmpty == true) {
+      return localBalance;
+    }
+
+    return null;
   }
 
   @override

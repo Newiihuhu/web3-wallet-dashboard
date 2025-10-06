@@ -59,9 +59,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       WalletAddressWidget(address: state.address),
                       WalletOverviewWidget(
                         walletOverview: state.walletOverview,
-                        onRefresh: () {
-                          _dashboardBloc.add(const GetWalletDataEvent());
-                        },
                       ),
                       const SizedBox(height: 16),
                       TokensListWidget(tokens: state.tokens),

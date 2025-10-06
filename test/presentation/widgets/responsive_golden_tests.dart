@@ -262,10 +262,7 @@ void main() {
       await tester.pumpWidget(
         GoldenTestHelper.createResponsiveWrapper(
           size: const Size(375, 667),
-          child: WalletOverviewWidget(
-            walletOverview: mockWalletOverview,
-            onRefresh: () {},
-          ),
+          child: WalletOverviewWidget(walletOverview: mockWalletOverview),
         ),
       );
 
@@ -277,10 +274,7 @@ void main() {
       await tester.pumpWidget(
         GoldenTestHelper.createResponsiveWrapper(
           size: const Size(768, 1024),
-          child: WalletOverviewWidget(
-            walletOverview: mockWalletOverview,
-            onRefresh: () {},
-          ),
+          child: WalletOverviewWidget(walletOverview: mockWalletOverview),
         ),
       );
 

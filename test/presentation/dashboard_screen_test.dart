@@ -7,7 +7,6 @@ import 'package:web3_wallet/domain/entities/tokens_overview_entity.dart';
 import 'package:web3_wallet/presentation/bloc/dashboard_bloc.dart';
 import 'package:web3_wallet/presentation/bloc/dashboard_event.dart';
 import 'package:web3_wallet/presentation/bloc/dashboard_state.dart';
-import 'package:web3_wallet/presentation/dashboard_constant.dart';
 import 'package:web3_wallet/presentation/dashboard_screen.dart';
 import 'package:web3_wallet/presentation/widgets/dashboard_appbar_widget.dart';
 import 'package:web3_wallet/presentation/widgets/dashboard_error_widget.dart';
@@ -205,40 +204,6 @@ void main() {
         expect(walletOverviewWidget.walletOverview, walletOverviewEntityMock);
         expect(tokensListWidget.tokens, testTokens);
       });
-      testWidgets(
-        'should dispatch GetWalletDataEvent on refresh from loaded state',
-        (WidgetTester tester) async {
-          // Given
-          const testAddress = '0x1234567890abcdef1234567890abcdef12345678';
-          final testTokens = [
-            TokensOverviewEntity(
-              symbol: 'USDT',
-              name: 'Tether USD',
-              balance: 1000.0,
-              usdValue: 1000.0,
-            ),
-          ];
-
-          when(() => mockDashboardBloc.state).thenReturn(
-            DashboardLoaded(
-              address: testAddress,
-              walletOverview: walletOverviewEntityMock,
-              tokens: testTokens,
-            ),
-          );
-
-          // When
-          await tester.pumpWidget(prepareWidget());
-
-          final refreshButton = find.text(DashboardConstant.refresh);
-          await tester.tap(refreshButton);
-
-          // Then
-          verify(
-            () => mockDashboardBloc.add(const GetWalletDataEvent()),
-          ).called(2);
-        },
-      );
     });
   });
 }

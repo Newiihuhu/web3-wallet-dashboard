@@ -10,7 +10,7 @@ class WalletAddressRepositoryImpl implements WalletAddressRepository {
 
   @override
   Future<String> getSavedWalletAddress() async {
-    if (!hasSavedWalletAddress()) {
+    if (!_localStorageDatasource.hasWalletAddress()) {
       await _localStorageDatasource.saveWalletAddress(
         WalletConstants.defaultWalletAddress,
       );
@@ -23,15 +23,5 @@ class WalletAddressRepositoryImpl implements WalletAddressRepository {
     }
 
     return savedAddress;
-  }
-
-  @override
-  bool hasSavedWalletAddress() {
-    return _localStorageDatasource.hasWalletAddress();
-  }
-
-  @override
-  Future<bool> saveWalletAddress(String address) async {
-    return await _localStorageDatasource.saveWalletAddress(address);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:web3_wallet/core/utils/formatter.dart';
+
 class TokenBalanceModel {
   final String contractAddress;
   final String tokenBalance;
@@ -12,10 +14,6 @@ class TokenBalanceModel {
       contractAddress: json['contractAddress'] as String,
       tokenBalance: json['tokenBalance'] as String,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'contractAddress': contractAddress, 'tokenBalance': tokenBalance};
   }
 }
 
@@ -34,13 +32,6 @@ class TokensResultModel {
           )
           .toList(),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'address': address,
-      'tokenBalances': tokenBalances.map((token) => token.toJson()).toList(),
-    };
   }
 }
 
@@ -65,7 +56,9 @@ class TokensListModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {'jsonrpc': jsonrpc, 'id': id, 'result': result.toJson()};
+  List<TokenBalanceModel> filterTokens() {
+    return result.tokenBalances
+        .where((token) => hexToBigInt(token.tokenBalance) != BigInt.zero)
+        .toList();
   }
 }

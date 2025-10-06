@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:web3_wallet/core/exception/app_exception.dart';
 import 'package:web3_wallet/data/datasources/local/wallet_overview_local_datasource.dart';
 import 'package:web3_wallet/domain/entities/eth_balance_entity.dart';
 
@@ -34,6 +35,19 @@ void main() {
         expect(result, true);
         verify(() => mockPrefs.setString('eth_balance', any())).called(1);
       });
+      test('should throw exception when save balance fails', () async {
+        // Given
+        final balance = EthBalanceEntity(balance: '0x1234567890abcdef');
+        when(
+          () => mockPrefs.setString('eth_balance', any()),
+        ).thenThrow(Exception('Save balance failed'));
+
+        // When & Then
+        expect(
+          () => datasource.saveETHBalance(balance),
+          throwsA(isA<LocalStorageException>()),
+        );
+      });
     });
 
     group('getETHBalance', () {
@@ -50,15 +64,18 @@ void main() {
         expect(result, isNotNull);
         expect(result!.balance, '0x1234567890abcdef');
       });
-      test('should return empty when data is empty', () {
+      test('should return empty balance when data is empty', () {
         // Given
-        when(() => mockPrefs.getString('eth_balance')).thenReturn('{}');
+        when(
+          () => mockPrefs.getString('eth_balance'),
+        ).thenReturn('{"balance":""}');
 
         // When
         final result = datasource.getETHBalance();
 
         // Then
-        expect(result, isEmpty);
+        expect(result, isNotNull);
+        expect(result!.balance, isEmpty);
       });
 
       test('should return null when no cached data exists', () {
@@ -70,6 +87,18 @@ void main() {
 
         // Then
         expect(result, isNull);
+      });
+      test('should throw exception when get balance fails', () async {
+        // Given
+        when(
+          () => mockPrefs.getString('eth_balance'),
+        ).thenThrow(Exception('Get balance failed'));
+
+        // When & Then
+        expect(
+          () => datasource.getETHBalance(),
+          throwsA(isA<LocalStorageException>()),
+        );
       });
     });
   });

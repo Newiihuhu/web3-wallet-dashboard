@@ -4,7 +4,4 @@ class WalletConstants {
 
   // error messages
   static const String addressNotFoundException = 'No wallet address found in storage';
-  static const String authenticationException = 'API key invalid';
-  static const String networkException = 'Network error';
-  static const String badResponseException = 'Bad response';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:web3_wallet/core/exception/app_exception.dart';
 import 'package:web3_wallet/data/datasources/local/wallet_address_local_datasource.dart';
 
 import '__mock__/shared_preferences_mock.dart';
@@ -38,6 +39,18 @@ void main() {
           ).called(1);
         },
       );
+      test('should throw exception when save wallet address fails', () async {
+        // Given
+        when(
+          () => mockSharedPreferences.setString(walletAddressKey, any()),
+        ).thenThrow(Exception('Save wallet address failed'));
+
+        // When & Then
+        expect(
+          () => datasource.saveWalletAddress(testAddress),
+          throwsA(isA<LocalStorageException>()),
+        );
+      });
     });
 
     group('getWalletAddress', () {
@@ -62,6 +75,18 @@ void main() {
           ).called(1);
         },
       );
+      test('should throw exception when get wallet address fails', () async {
+        // Given
+        when(
+          () => mockSharedPreferences.getString(walletAddressKey),
+        ).thenThrow(Exception('Get wallet address failed'));
+
+        // When & Then
+        expect(
+          () => datasource.getWalletAddress(),
+          throwsA(isA<LocalStorageException>()),
+        );
+      });
     });
   });
 }

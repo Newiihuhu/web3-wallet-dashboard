@@ -1,4 +1,3 @@
-import 'package:web3_wallet/core/utils/formatter.dart';
 import 'package:web3_wallet/data/datasources/local/tokens_local_datasource.dart';
 import 'package:web3_wallet/data/datasources/local/wallet_overview_local_datasource.dart';
 import 'package:web3_wallet/data/datasources/remote/wallet_remote_datasource.dart';
@@ -42,9 +41,7 @@ class WalletRepositoryImpl implements WalletRepository {
     }
 
     final remoteTokens = await _remoteDatasource.getTokenBalances(address);
-    final filteredTokens = remoteTokens.result.tokenBalances
-        .where((token) => hexToBigInt(token.tokenBalance) != BigInt.zero)
-        .toList();
+    final filteredTokens = remoteTokens.filterTokens();
 
     final List<TokensEntity> tokens = [];
 
@@ -65,7 +62,6 @@ class WalletRepositoryImpl implements WalletRepository {
     }
 
     await _tokensLocalDatasource.saveTokens(tokens);
-
     return tokens;
   }
 }

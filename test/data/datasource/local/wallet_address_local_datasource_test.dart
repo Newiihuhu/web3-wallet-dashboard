@@ -88,5 +88,29 @@ void main() {
         );
       });
     });
+    group('hasWalletAddress', () {
+      test('should return true when data exists', () {
+        // Given
+        when(() => mockSharedPreferences.containsKey(any())).thenReturn(true);
+
+        // When
+        final result = datasource.hasWalletAddress();
+
+        // Then
+        expect(result, isTrue);
+        verify(() => mockSharedPreferences.containsKey(any())).called(1);
+      });
+      test('should return false when data does not exist', () {
+        // Given
+        when(() => mockSharedPreferences.containsKey(any())).thenReturn(false);
+
+        // When
+        final result = datasource.hasWalletAddress();
+
+        // Then
+        expect(result, isFalse);
+        verify(() => mockSharedPreferences.containsKey(any())).called(1);
+      });
+    });
   });
 }

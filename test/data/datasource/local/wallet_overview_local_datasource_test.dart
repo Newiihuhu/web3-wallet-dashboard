@@ -101,5 +101,29 @@ void main() {
         );
       });
     });
+    group('hasBalanceData', () {
+      test('should return true when data exists', () {
+        // Given
+        when(() => mockPrefs.containsKey(any())).thenReturn(true);
+
+        // When
+        final result = datasource.hasBalanceData();
+
+        // Then
+        expect(result, isTrue);
+        verify(() => mockPrefs.containsKey(any())).called(1);
+      });
+      test('should return false when data does not exist', () {
+        // Given
+        when(() => mockPrefs.containsKey(any())).thenReturn(false);
+
+        // When
+        final result = datasource.hasBalanceData();
+
+        // Then
+        expect(result, isFalse);
+        verify(() => mockPrefs.containsKey(any())).called(1);
+      });
+    });
   });
 }

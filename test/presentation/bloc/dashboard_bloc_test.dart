@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:web3_wallet/core/exception/app_exception.dart';
 import 'package:web3_wallet/domain/entities/eth_balance_entity.dart';
+import 'package:web3_wallet/domain/entities/tokens_entity.dart';
 import 'package:web3_wallet/domain/usecases/wallet_address_usecase.dart';
 import 'package:web3_wallet/domain/usecases/wallet_usecase.dart';
 import 'package:web3_wallet/presentation/bloc/dashboard_bloc.dart';
@@ -43,6 +44,22 @@ void main() {
     group('GetWalletDataEvent', () {
       const testAddress = '0x1234567890abcdef1234567890abcdef12345678';
       const testBalance = '0x1bc16d674ec80000';
+      final testTokens = [
+        TokensEntity(
+          contractAddress: '0x1234567890abcdef1234567890abcdef12345678',
+          symbol: 'USDC',
+          name: 'USD Coin',
+          balance: '0x1dcd6500',
+          decimals: 6,
+        ),
+        TokensEntity(
+          contractAddress: '0x9876543210fedcba9876543210fedcba98765432',
+          symbol: 'WBTC',
+          name: 'Wrapped Bitcoin',
+          balance: '0x989680',
+          decimals: 8,
+        ),
+      ];
 
       blocTest(
         'should emit [DashboardLoading, DashboardLoaded] when successful',
@@ -55,7 +72,7 @@ void main() {
           ).thenAnswer((_) async => EthBalanceEntity(balance: testBalance));
           when(
             () => mockWalletOverviewUsecase.getErc20Tokens(testAddress),
-          ).thenAnswer((_) async => []);
+          ).thenAnswer((_) async => testTokens);
           return dashboardBloc;
         },
         act: (bloc) => bloc.add(const GetWalletDataEvent()),
@@ -74,9 +91,34 @@ void main() {
                 9089.5,
               )
               .having(
-                (state) => state.walletOverview.totalToken,
-                'totalToken',
-                0,
+                (state) => state.tokens[0].balance,
+                'firstTokenBalance',
+                500.0,
+              )
+              .having(
+                (state) => state.tokens[0].usdValue,
+                'firstTokenUsdValue',
+                500.0,
+              )
+              .having(
+                (state) => state.tokens[1].symbol,
+                'secondTokenSymbol',
+                'WBTC',
+              )
+              .having(
+                (state) => state.tokens[1].name,
+                'secondTokenName',
+                'Wrapped Bitcoin',
+              )
+              .having(
+                (state) => state.tokens[1].balance,
+                'secondTokenBalance',
+                0.1,
+              )
+              .having(
+                (state) => state.tokens[1].usdValue,
+                'secondTokenUsdValue',
+                9500.0,
               ),
         ],
         verify: (_) {

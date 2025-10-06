@@ -33,35 +33,56 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<List<TokensEntity>> getErc20Tokens(String address) async {
-    if (_tokensLocalDatasource.hasTokensData()) {
-      final localTokens = _tokensLocalDatasource.getTokens();
-      if (localTokens != null && localTokens.isNotEmpty) {
-        return localTokens;
-      }
+    final cachedTokens = _getCachedTokens();
+    if (cachedTokens != null) {
+      return cachedTokens;
     }
 
+    final tokens = await _fetchAndProcessTokens(address);
+
+    await _tokensLocalDatasource.saveTokens(tokens);
+
+    return tokens;
+  }
+
+  List<TokensEntity>? _getCachedTokens() {
+    if (!_tokensLocalDatasource.hasTokensData()) {
+      return null;
+    }
+
+    final localTokens = _tokensLocalDatasource.getTokens();
+    if (localTokens?.isNotEmpty == true) {
+      return localTokens;
+    }
+
+    return null;
+  }
+
+  Future<List<TokensEntity>> _fetchAndProcessTokens(String address) async {
     final remoteTokens = await _remoteDatasource.getTokenBalances(address);
     final filteredTokens = remoteTokens.filterTokens();
 
     final List<TokensEntity> tokens = [];
 
     for (final token in filteredTokens) {
-      final tokenMetadata = await _remoteDatasource.getTokenMetadata(
-        token.contractAddress,
-      );
-
-      tokens.add(
-        TokensEntity(
-          contractAddress: token.contractAddress,
-          symbol: tokenMetadata.result.symbol,
-          name: tokenMetadata.result.name,
-          balance: token.tokenBalance,
-          decimals: tokenMetadata.result.decimals,
-        ),
-      );
+      final tokenEntity = await _createTokenEntity(token);
+      tokens.add(tokenEntity);
     }
 
-    await _tokensLocalDatasource.saveTokens(tokens);
     return tokens;
+  }
+
+  Future<TokensEntity> _createTokenEntity(dynamic token) async {
+    final tokenMetadata = await _remoteDatasource.getTokenMetadata(
+      token.contractAddress,
+    );
+
+    return TokensEntity(
+      contractAddress: token.contractAddress,
+      symbol: tokenMetadata.result.symbol,
+      name: tokenMetadata.result.name,
+      balance: token.tokenBalance,
+      decimals: tokenMetadata.result.decimals,
+    );
   }
 }

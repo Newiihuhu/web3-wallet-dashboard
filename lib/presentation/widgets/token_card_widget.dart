@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web3_wallet/core/theme/app_theme.dart';
+import 'package:web3_wallet/core/utils/formatter.dart';
 import 'package:web3_wallet/domain/entities/tokens_overview_entity.dart';
 import 'package:web3_wallet/presentation/dashboard_constant.dart';
 
@@ -87,7 +88,7 @@ class TokenCardWidget extends StatelessWidget {
           style: TextStyle(fontSize: 12, color: AppTheme.secondaryText),
         ),
         Text(
-          token.usdValue.toStringAsFixed(2),
+          formatNumberWithCommas(token.usdValue),
           style: const TextStyle(fontSize: 14, color: AppTheme.primaryText),
           overflow: TextOverflow.ellipsis,
         ),

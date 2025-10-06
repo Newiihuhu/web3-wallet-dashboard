@@ -138,5 +138,27 @@ void main() {
         }
       });
     });
+
+    group('formatNumberWithCommas', () {
+      test('should format number with commas', () {
+        // Given
+        final testCases = [
+          {'input': 1234567890.1234567890, 'expected': '1,234,567,890.12'},
+          {'input': 4567890.1234567890, 'expected': '4,567,890.12'},
+          {'input': 0.8767565, 'expected': '0.88'},
+          {'input': 10000.00, 'expected': '10,000.00'},
+          {
+            'input': 1000000000000000000.0,
+            'expected': '1,000,000,000,000,000,000.00',
+          },
+        ];
+
+        // When & Then
+        for (final testCase in testCases) {
+          final result = formatNumberWithCommas(testCase['input'] as double);
+          expect(result, testCase['expected']);
+        }
+      });
+    });
   });
 }

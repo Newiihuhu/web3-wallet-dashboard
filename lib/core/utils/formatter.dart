@@ -11,3 +11,18 @@ String shortenAddress(String address, {int prefix = 6, int suffix = 4}) {
   if (address.length <= prefix + suffix) return address;
   return '${address.substring(0, prefix)}...${address.substring(address.length - suffix)}';
 }
+
+String formatNumberWithCommas(double number, {int decimalPlaces = 2}) {
+  final formatted = number.toStringAsFixed(decimalPlaces);
+  final parts = formatted.split('.');
+  final integerPart = parts[0];
+  final decimalPart = parts.length > 1 ? '.${parts[1]}' : '';
+
+  final formatter = RegExp(r'(\d)(?=(\d{3})+(?!\d))');
+  final formattedInteger = integerPart.replaceAllMapped(
+    formatter,
+    (Match match) => '${match[1]},',
+  );
+
+  return formattedInteger + decimalPart;
+}

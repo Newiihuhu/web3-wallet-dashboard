@@ -239,8 +239,7 @@ void main() {
                 ),
                 TokenBalanceModel(
                   contractAddress: '0x0000000000000000000000000000000000000002',
-                  tokenBalance:
-                      '0x1234567890abcdef',
+                  tokenBalance: '0x1234567890abcdef',
                 ),
                 TokenBalanceModel(
                   contractAddress: '0x0000000000000000000000000000000000000003',

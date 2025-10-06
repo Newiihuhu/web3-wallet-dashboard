@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:web3_wallet/core/utils/formatter.dart';
 import 'package:web3_wallet/domain/entities/tokens_overview_entity.dart';
 import 'package:web3_wallet/presentation/dashboard_constant.dart';
 import 'package:web3_wallet/presentation/widgets/token_card_widget.dart';
@@ -27,7 +28,7 @@ void main() {
       expect(find.text(token.name), findsOneWidget);
       expect(find.text(token.balance.toString()), findsOneWidget);
       expect(
-        find.textContaining(token.usdValue.toStringAsFixed(2)),
+        find.textContaining(formatNumberWithCommas(token.usdValue)),
         findsOneWidget,
       );
       expect(find.text(DashboardConstant.balance), findsOneWidget);

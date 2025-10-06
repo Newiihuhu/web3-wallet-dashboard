@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web3_wallet/core/theme/app_theme.dart';
+import 'package:web3_wallet/core/utils/formatter.dart';
 import 'package:web3_wallet/domain/entities/wallet_overview_entity.dart';
 import 'package:web3_wallet/presentation/dashboard_constant.dart';
 
@@ -54,7 +55,7 @@ class WalletOverviewWidget extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      walletOverview.ethBalance.toString(),
+                      formatNumberWithCommas(walletOverview.ethBalance),
                       style: TextStyle(
                         fontSize: 14,
                         color: AppTheme.primaryText,
@@ -74,7 +75,7 @@ class WalletOverviewWidget extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      walletOverview.totalValue.toStringAsFixed(2),
+                      formatNumberWithCommas(walletOverview.totalValue),
 
                       style: TextStyle(
                         fontSize: 14,
@@ -97,7 +98,9 @@ class WalletOverviewWidget extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      walletOverview.totalToken.toString(),
+                      formatNumberWithCommas(
+                        walletOverview.totalToken.toDouble(),
+                      ),
                       style: TextStyle(
                         fontSize: 14,
                         color: AppTheme.primaryText,
